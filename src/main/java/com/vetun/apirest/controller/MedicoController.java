@@ -98,5 +98,10 @@ public class MedicoController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @GetMapping("/medicos")
+    public ResponseEntity<?> buscarMedico(){
+        List<Medico> medicos = medicoService.findAll();
+        return ResponseEntity.ok(medicos);
+    }
 
 }

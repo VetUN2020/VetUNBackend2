@@ -8,6 +8,8 @@ import com.vetun.apirest.pojo.RegistrarMedicoPOJO;
 import com.vetun.apirest.repository.MedicoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MedicoService {
 
@@ -54,5 +56,7 @@ public class MedicoService {
         return medicoRepository.findByUsuarioIdUsuario(id);
     }
 
-
+    public List<Medico> findAll(){
+        return medicoRepository.findAll();
+    }
 }

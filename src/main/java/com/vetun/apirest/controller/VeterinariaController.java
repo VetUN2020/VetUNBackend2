@@ -83,6 +83,7 @@ public class VeterinariaController {
 
         PerfilVeterinariaPOJO perfilVeterinaria = new PerfilVeterinariaPOJO();
 
+        perfilVeterinaria.setIdVeterinaria(veterinaria.getIdVeterinaria());
         perfilVeterinaria.setNombreVeterinaria(veterinaria.getNombreVeterinaria());
         perfilVeterinaria.setDireccionVeterinaria(veterinaria.getDireccionVeterinaria());
         perfilVeterinaria.setTelefonoVeterinaria(veterinaria.getTelefonoVeterinaria());

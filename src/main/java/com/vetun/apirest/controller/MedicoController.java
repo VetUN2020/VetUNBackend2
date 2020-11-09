@@ -104,4 +104,12 @@ public class MedicoController {
         return ResponseEntity.ok(medicos);
     }
 
+    @GetMapping("medicoIdVet/{idVeterniaria}")
+    public ResponseEntity<?> buscarMedicoSegunIdVeterinaria(@PathVariable("idVeterniaria") int id){
+        List<Medico> medicos = medicoService.findByIdVeterinaria(id);
+        if(medicos == null) {
+            return new ResponseEntity<>( HttpStatus.NO_CONTENT );
+        }
+        return ResponseEntity.ok(medicos);
+    }
 }

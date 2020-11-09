@@ -59,4 +59,6 @@ public class MedicoService {
     public List<Medico> findAll(){
         return medicoRepository.findAll();
     }
+
+    public List<Medico> findByIdVeterinaria(int id) {return medicoRepository.findByIdVeterinariaIdVeterinaria(id);}
 }

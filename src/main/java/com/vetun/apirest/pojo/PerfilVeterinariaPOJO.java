@@ -3,12 +3,21 @@ package com.vetun.apirest.pojo;
 
 public class PerfilVeterinariaPOJO {
 
+    private int idVeterinaria;
     private String nombreVeterinaria;
     private String direccionVeterinaria;
     private long telefonoVeterinaria;
     private String tipoVeterinaria;
 
     public PerfilVeterinariaPOJO() {
+    }
+
+    public int getIdVeterinaria() {
+        return idVeterinaria;
+    }
+
+    public void setIdVeterinaria(int idVeterinaria) {
+        this.idVeterinaria = idVeterinaria;
     }
 
     public String getNombreVeterinaria() {
@@ -46,6 +55,7 @@ public class PerfilVeterinariaPOJO {
     @Override
     public String toString() {
         return "PerfilVeterinariaPOJO{" +
+                "idVeterinaria='" + idVeterinaria + '\'' +
                 "nombreVeterinaria='" + nombreVeterinaria + '\'' +
                 ", direccionVeterinaria='" + direccionVeterinaria + '\'' +
                 ", telefonoVeterinaria=" + telefonoVeterinaria +

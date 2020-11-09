@@ -4,9 +4,9 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.data.annotation.CreatedBy;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.Date;
 
 @Entity
 @Table(name="cita")
@@ -23,6 +23,7 @@ public class Cita {
     private Medico idMedico;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name="id_mascota")
     private Mascota idMascota;
 
@@ -31,7 +32,10 @@ public class Cita {
     private TipoAtencion idAtencion;
 
     @Column(name="fecha_cita")
-    private Time fechaCita;
+    private Date fechaCita;
+
+    @Column(name="hora_cita")
+    private Time horaCita;
 
     @Column(name="modalidad_cita")
     private String modalidadCita;
@@ -40,12 +44,13 @@ public class Cita {
 
     }
 
-    public Cita(int idCita, Medico idMedico, Mascota idMascota, TipoAtencion idAtencion, Time fechaCita, String modalidadCita) {
+    public Cita(int idCita, Medico idMedico, Mascota idMascota, TipoAtencion idAtencion, Date fechaCita, Time horaCita, String modalidadCita) {
         this.idCita = idCita;
         this.idMedico = idMedico;
         this.idMascota = idMascota;
         this.idAtencion = idAtencion;
         this.fechaCita = fechaCita;
+        this.horaCita = horaCita;
         this.modalidadCita = modalidadCita;
     }
 
@@ -81,12 +86,20 @@ public class Cita {
         this.idAtencion = idAtencion;
     }
 
-    public Time getFechaCita() {
+    public Date getFechaCita() {
         return fechaCita;
     }
 
-    public void setFechaCita(Time fechaCita) {
+    public void setFechaCita(Date fechaCita) {
         this.fechaCita = fechaCita;
+    }
+
+    public Time getHoraCita() {
+        return horaCita;
+    }
+
+    public void setHoraCita(Time horaCita) {
+        this.horaCita = horaCita;
     }
 
     public String getModalidadCita() {

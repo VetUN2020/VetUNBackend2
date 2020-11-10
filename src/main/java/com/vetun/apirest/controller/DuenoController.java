@@ -99,18 +99,4 @@ public class DuenoController {
         return ResponseEntity.ok(perfil);
     }
 
-    @PostMapping(value = {"/pruebas/agendar"})
-    public ResponseEntity<?> agendarCita(@RequestBody Cita agendarCita){
-        Cita cita = agendarCita;
-        citaService.save(cita);
-        return ResponseEntity.ok(cita);
-    }
-
-
-
-
-
-
-
-
 }

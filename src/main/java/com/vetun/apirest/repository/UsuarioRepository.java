@@ -10,4 +10,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     Usuario findByUsername( String username );
 
     Usuario findByCorreoElectronico( String correo );
+
+
 }

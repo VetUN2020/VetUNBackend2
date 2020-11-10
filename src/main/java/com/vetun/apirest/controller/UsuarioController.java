@@ -52,6 +52,7 @@ public class UsuarioController {
 
     @GetMapping(value = {"/usuario/horasDisponibles"})
     public ResponseEntity<?> obtenerHorasDisponibles(@RequestBody FechaCitaPOJO fechaCita){
+        String username = SecurityContextHolder.getContext( ).getAuthentication( ).getName( );
 
         Medico medico = medicoService.findById(fechaCita.getIdMedico());
         List<HoraAtencion> horarios = horaAtencionService.findByMedico(medico);

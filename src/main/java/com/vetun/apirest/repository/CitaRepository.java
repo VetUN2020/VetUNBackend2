@@ -9,9 +9,6 @@ import java.util.List;
 
 public interface CitaRepository extends JpaRepository<Cita, Integer> {
 
-    //List<Cita> findByFechaCitaBetween(Timestamp a, Timestamp b);
-
     List<Cita> findByFechaCitaAndIdMedicoIdMedico(Date fechaCita, int idmedico);
-
 
 }

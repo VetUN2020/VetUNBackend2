@@ -11,4 +11,5 @@ public interface MedicoRepository extends JpaRepository<Medico, Integer> {
     Medico findByUsuarioIdUsuario(int id);
 
     List<Medico> findByIdVeterinariaIdVeterinaria(int id);
+
 }

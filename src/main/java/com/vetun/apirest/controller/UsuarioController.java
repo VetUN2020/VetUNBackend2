@@ -1,20 +1,17 @@
 package com.vetun.apirest.controller;
 
-import com.vetun.apirest.model.Dueno;
-import com.vetun.apirest.model.HoraAtencion;
-import com.vetun.apirest.model.Medico;
-import com.vetun.apirest.model.Usuario;
+import com.vetun.apirest.model.*;
+import com.vetun.apirest.pojo.FechaCitaPOJO;
 import com.vetun.apirest.pojo.MenuBarUserPOJO;
-import com.vetun.apirest.service.DuenoService;
-import com.vetun.apirest.service.HoraAtencionService;
-import com.vetun.apirest.service.MedicoService;
-import com.vetun.apirest.service.UsuarioService;
+import com.vetun.apirest.service.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.sql.Date;
+import java.util.*;
 
 @RestController
 public class UsuarioController {
@@ -22,12 +19,14 @@ public class UsuarioController {
     private DuenoService duenoService;
     private MedicoService medicoService;
     private HoraAtencionService horaAtencionService;
+    private CitaService citaService;
 
-    public UsuarioController(UsuarioService usuarioService, DuenoService duenoService, MedicoService medicoService,HoraAtencionService horaAtencionService) {
+    public UsuarioController(UsuarioService usuarioService, DuenoService duenoService, MedicoService medicoService,HoraAtencionService horaAtencionService, CitaService citaService) {
         this.usuarioService = usuarioService;
         this.duenoService = duenoService;
         this.medicoService = medicoService;
         this.horaAtencionService = horaAtencionService;
+        this.citaService = citaService;
     }
 
     @GetMapping(value = {"/usuario"} )
@@ -51,13 +50,29 @@ public class UsuarioController {
         return ResponseEntity.ok(user);
     }
 
-    @GetMapping(value = {"/pruebas/horasDisponibles"})
-    public ResponseEntity<?> obtenerHorasDisponibles(){
+    @GetMapping(value = {"/usuario/horasDisponibles"})
+    public ResponseEntity<?> obtenerHorasDisponibles(@RequestBody FechaCitaPOJO fechaCita){
 
-        Medico medico = medicoService.findById(1);
+        Medico medico = medicoService.findById(fechaCita.getIdMedico());
         List<HoraAtencion> horarios = horaAtencionService.findByMedico(medico);
+        List<Cita> citas = citaService.findCitas(fechaCita.getFechaCita(), fechaCita.getIdMedico());
+
+
+        List<HoraAtencion> horasRemover = new ArrayList<>() ;
+
+        for(Cita c: citas){
+         for(HoraAtencion h : horarios){
+             if(c.getHoraCita().equals(h.getHoraTiempo())){
+                 horasRemover.add(h);
+             }
+         }
+        }
+        horarios.removeAll(horasRemover);
 
         return ResponseEntity.ok(horarios);
     }
+
+
+
 
 }

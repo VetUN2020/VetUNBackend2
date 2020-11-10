@@ -7,6 +7,7 @@ import com.vetun.apirest.service.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -50,7 +51,7 @@ public class UsuarioController {
         return ResponseEntity.ok(user);
     }
 
-    @GetMapping(value = {"/usuario/horasDisponibles"})
+    @PostMapping(value = {"/usuario/horasDisponibles"})
     public ResponseEntity<?> obtenerHorasDisponibles(@RequestBody FechaCitaPOJO fechaCita){
 
         Medico medico = medicoService.findById(fechaCita.getIdMedico());
@@ -72,7 +73,12 @@ public class UsuarioController {
         return ResponseEntity.ok(horarios);
     }
 
-
+    @PostMapping(value = {"/usuario/agendarCita"})
+    public ResponseEntity<?> agendarCita(@RequestBody Cita agendarCita){
+        Cita cita = agendarCita;
+        citaService.save(cita);
+        return ResponseEntity.ok(cita);
+    }
 
 
 }

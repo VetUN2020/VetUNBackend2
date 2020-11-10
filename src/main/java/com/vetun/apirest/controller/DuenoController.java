@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
@@ -97,32 +98,5 @@ public class DuenoController {
 
         return ResponseEntity.ok(perfil);
     }
-
-    @PostMapping(value = {"/pruebas/agendar"})
-    public ResponseEntity<?> agendarCita(@RequestBody Cita agendarCita){
-        Cita cita = agendarCita;
-
-        //System.out.println(cita.getFechaCita());
-        citaService.save(cita);
-
-        return ResponseEntity.ok(cita);
-    }
-
-    @GetMapping(value = {"/pruebas/citasAg"})
-    public ResponseEntity<?> citasAgendas(@RequestBody List<PruebasPOJO> lista){
-
-        //List<Cita> citas = citaService.findCitas(pojo.getFechaCita(), pojo.getFechaCita2());
-
-        String nuevo = "";
-        for(PruebasPOJO a : lista){
-            nuevo += a.getPrueba();
-            nuevo += " ";
-        }
-
-        return ResponseEntity.ok(nuevo);
-    }
-
-
-
 
 }

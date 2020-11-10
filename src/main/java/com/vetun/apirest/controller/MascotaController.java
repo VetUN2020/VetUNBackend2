@@ -55,5 +55,14 @@ public class MascotaController {
 
     }
 
+    @GetMapping(value = {"pruebas/mascotas"})
+    public ResponseEntity<?> obtenerMascotasAll(){
+
+        List<Mascota> mascotas = mascotaService.findAll();
+
+        return  ResponseEntity.ok(mascotas);
+
+    }
+
 
 }

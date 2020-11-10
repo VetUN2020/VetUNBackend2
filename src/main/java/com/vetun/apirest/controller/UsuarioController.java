@@ -4,6 +4,7 @@ import com.vetun.apirest.model.*;
 import com.vetun.apirest.pojo.FechaCitaPOJO;
 import com.vetun.apirest.pojo.MenuBarUserPOJO;
 import com.vetun.apirest.service.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,13 +22,15 @@ public class UsuarioController {
     private MedicoService medicoService;
     private HoraAtencionService horaAtencionService;
     private CitaService citaService;
+    private TipoAtencionService tipoAtencionService;
 
-    public UsuarioController(UsuarioService usuarioService, DuenoService duenoService, MedicoService medicoService,HoraAtencionService horaAtencionService, CitaService citaService) {
+    public UsuarioController(UsuarioService usuarioService, DuenoService duenoService, MedicoService medicoService, HoraAtencionService horaAtencionService, CitaService citaService, TipoAtencionService tipoAtencionService) {
         this.usuarioService = usuarioService;
         this.duenoService = duenoService;
         this.medicoService = medicoService;
         this.horaAtencionService = horaAtencionService;
         this.citaService = citaService;
+        this.tipoAtencionService = tipoAtencionService;
     }
 
     @GetMapping(value = {"/usuario"} )
@@ -71,6 +74,19 @@ public class UsuarioController {
         horarios.removeAll(horasRemover);
 
         return ResponseEntity.ok(horarios);
+    }
+
+    @GetMapping(value = {"pruebas/tiposAtencion"})
+    public ResponseEntity<?> obtenerTiposAtencion(){
+
+        List<TipoAtencion> tiposAtencion = tipoAtencionService.findAll();
+
+        if(tiposAtencion == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return  ResponseEntity.ok(tiposAtencion);
+
     }
 
     @PostMapping(value = {"/usuario/agendarCita"})

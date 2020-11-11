@@ -25,10 +25,6 @@ public class CitaService {
         citaRepository.save( cita );
     }
 
-    /*public List<Cita> findCitas(Timestamp a, Timestamp b){
-        return  citaRepository.findByFechaCitaBetween(a, b);
-    }*/
-
     public List<Cita> findCitas(Date fechaCita, int idMedico){
         return citaRepository.findByFechaCitaAndIdMedicoIdMedico(fechaCita, idMedico);
     }

@@ -56,6 +56,7 @@ public class UsuarioController {
 
     @PostMapping(value = {"/usuario/horasDisponibles"})
     public ResponseEntity<?> obtenerHorasDisponibles(@RequestBody FechaCitaPOJO fechaCita){
+        String username = SecurityContextHolder.getContext( ).getAuthentication( ).getName( );
 
         Medico medico = medicoService.findById(fechaCita.getIdMedico());
         List<HoraAtencion> horarios = horaAtencionService.findByMedico(medico);
@@ -96,5 +97,10 @@ public class UsuarioController {
         return ResponseEntity.ok(cita);
     }
 
+    @GetMapping(value = {"/usuario/obtenerTipo"})
+    public ResponseEntity<?> obtenerTipos(){
+        List<TipoAtencion> atencion = tipoAtencionService.findAll();
+        return ResponseEntity.ok(atencion);
+    }
 
 }

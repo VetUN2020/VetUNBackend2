@@ -1,5 +1,8 @@
 package com.vetun.apirest.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,10 +15,13 @@ public class Costo {
     private int idCosto;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "id_atencion" )
     private TipoAtencion idAtencion;
 
     @ManyToOne
+    @JsonIgnore
+    @JsonIgnoreProperties("costos")
     @JoinColumn(name = "id_medico" )
     private Medico idMedico;
 
@@ -55,6 +61,14 @@ public class Costo {
 
     public void setCosto(int costo) {
         this.costo = costo;
+    }
+
+    @Override
+    public String toString() {
+        return "Costo{" +
+                "idCosto=" + idCosto +
+                ", costo=" + costo +
+                '}';
     }
 }
 

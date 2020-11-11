@@ -10,6 +10,9 @@ public class CostoService {
 
     private CostoRepository costoRepository;
 
+    public CostoService(CostoRepository costoRepository) {
+        this.costoRepository = costoRepository;
+    }
 
     public Costo findById(Integer id ){
         return  costoRepository.findById( id ).orElse( null );

@@ -289,3 +289,9 @@ alter table VACUNACION add constraint FK_VACUNACION2 foreign key (ID_MEDICO)
 
 INSERT INTO `rol`(`NOMBRE_ROL`) VALUES ('DUENO');
 INSERT INTO `rol`(`NOMBRE_ROL`) VALUES ('MEDICO');
+
+INSERT INTO `tipo_atencion`(`DESCRIPCION_ATENCION`) VALUES ('Consulta general');
+INSERT INTO `tipo_atencion`(`DESCRIPCION_ATENCION`) VALUES ('Vacunación');
+INSERT INTO `tipo_atencion`(`DESCRIPCION_ATENCION`) VALUES ('Cirugía');
+INSERT INTO `tipo_atencion`(`DESCRIPCION_ATENCION`) VALUES ('Cita especializada');
+INSERT INTO `tipo_atencion`(`DESCRIPCION_ATENCION`) VALUES ('Otro');

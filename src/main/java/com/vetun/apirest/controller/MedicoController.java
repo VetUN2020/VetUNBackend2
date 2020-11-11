@@ -5,10 +5,7 @@ import com.vetun.apirest.pojo.PerfilDuenoPOJO;
 import com.vetun.apirest.pojo.PerfilMedicoPOJO;
 import com.vetun.apirest.pojo.RegistrarMedicoPOJO;
 import com.vetun.apirest.repository.HoraAtencionRepository;
-import com.vetun.apirest.service.HoraAtencionService;
-import com.vetun.apirest.service.MedicoService;
-import com.vetun.apirest.service.RolService;
-import com.vetun.apirest.service.UsuarioService;
+import com.vetun.apirest.service.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,14 +22,15 @@ public class MedicoController {
     private RolService rolService;
     private HoraAtencionService horaAtencionService;
     private PasswordEncoder passwordEncoder;
+    private CostoService costoService;
 
-
-    public MedicoController(MedicoService medicoService, UsuarioService usuarioService, RolService rolService, PasswordEncoder passwordEncoder, HoraAtencionService horaAtencionService) {
+    public MedicoController(MedicoService medicoService, UsuarioService usuarioService, RolService rolService, HoraAtencionService horaAtencionService, PasswordEncoder passwordEncoder, CostoService costoService) {
         this.medicoService = medicoService;
         this.usuarioService = usuarioService;
         this.rolService = rolService;
-        this.passwordEncoder = passwordEncoder;
         this.horaAtencionService = horaAtencionService;
+        this.passwordEncoder = passwordEncoder;
+        this.costoService = costoService;
     }
 
     @GetMapping("/medicos/{medicoId}")
@@ -98,13 +96,13 @@ public class MedicoController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/medicos")
+    @GetMapping(value = "/medicos")
     public ResponseEntity<?> buscarMedico(){
         List<Medico> medicos = medicoService.findAll();
         return ResponseEntity.ok(medicos);
     }
 
-    @GetMapping("medicoIdVet/{idVeterniaria}")
+    @GetMapping(value = "/medicoIdVet/{idVeterniaria}")
     public ResponseEntity<?> buscarMedicoSegunIdVeterinaria(@PathVariable("idVeterniaria") int id){
         List<Medico> medicos = medicoService.findByIdVeterinaria(id);
         if(medicos == null) {
@@ -112,4 +110,18 @@ public class MedicoController {
         }
         return ResponseEntity.ok(medicos);
     }
+
+    @PostMapping(value = "/medico/agregarPrecios")
+    public ResponseEntity<?> agregarPreciosCitas(@RequestBody List<Costo> costosCitas){
+        String username = SecurityContextHolder.getContext( ).getAuthentication( ).getName( );
+        Usuario user = usuarioService.findByUsername(username);
+        Medico medico = medicoService.findByUsuarioIdUsuario(user.getIdUsuario());
+
+        for(Costo costo : costosCitas){
+            costo.setIdMedico(medico);
+            costoService.save(costo);
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.vetun.apirest.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.List;
@@ -57,18 +58,11 @@ public class Medico {
     private List<Cita> citas;
 
     @JsonIgnore
+    @JsonIgnoreProperties("idMedico")
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "idMedico")
     private List<Costo> costos;
 
     public Medico() {
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
     }
 
     public int getIdMedico() {
@@ -79,14 +73,6 @@ public class Medico {
         this.idMedico = idMedico;
     }
 
-    public String getCedulaMedico() {
-        return cedulaMedico;
-    }
-
-    public void setCedulaMedico(String cedulaMedico) {
-        this.cedulaMedico = cedulaMedico;
-    }
-
     public Veterinaria getIdVeterinaria() {
         return idVeterinaria;
     }
@@ -95,12 +81,20 @@ public class Medico {
         this.idVeterinaria = idVeterinaria;
     }
 
-    public List<Vacunacion> getVacunados() {
-        return vacunados;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setVacunados(List<Vacunacion> vacunados) {
-        this.vacunados = vacunados;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getCedulaMedico() {
+        return cedulaMedico;
+    }
+
+    public void setCedulaMedico(String cedulaMedico) {
+        this.cedulaMedico = cedulaMedico;
     }
 
     public String getNombreMedico() {
@@ -143,6 +137,14 @@ public class Medico {
         this.matriculaProfesional = matriculaProfesional;
     }
 
+    public String getLinkMedico() {
+        return linkMedico;
+    }
+
+    public void setLinkMedico(String linkMedico) {
+        this.linkMedico = linkMedico;
+    }
+
     public List<HoraAtencion> getHorarioMedico() {
         return horarioMedico;
     }
@@ -151,20 +153,12 @@ public class Medico {
         this.horarioMedico = horarioMedico;
     }
 
-    public List<Costo> getCostos() {
-        return costos;
+    public List<Vacunacion> getVacunados() {
+        return vacunados;
     }
 
-    public void setCostos(List<Costo> costos) {
-        this.costos = costos;
-    }
-
-    public String getLinkMedico() {
-        return linkMedico;
-    }
-
-    public void setLinkMedico(String linkMedico) {
-        this.linkMedico = linkMedico;
+    public void setVacunados(List<Vacunacion> vacunados) {
+        this.vacunados = vacunados;
     }
 
     public List<Cita> getCitas() {
@@ -175,11 +169,11 @@ public class Medico {
         this.citas = citas;
     }
 
-    public List<Costo> getCostoAtencion() {
+    public List<Costo> getCostos() {
         return costos;
     }
 
-    public void setCostoAtencion(List<Costo> costos) {
+    public void setCostos(List<Costo> costos) {
         this.costos = costos;
     }
 
@@ -187,8 +181,6 @@ public class Medico {
     public String toString() {
         return "Medico{" +
                 "idMedico=" + idMedico +
-                ", idVeterinaria=" + idVeterinaria +
-                ", usuario=" + usuario +
                 ", cedulaMedico='" + cedulaMedico + '\'' +
                 ", nombreMedico='" + nombreMedico + '\'' +
                 ", apellidoMedico='" + apellidoMedico + '\'' +
@@ -196,7 +188,6 @@ public class Medico {
                 ", telefonoMedico=" + telefonoMedico +
                 ", matriculaProfesional='" + matriculaProfesional + '\'' +
                 ", linkMedico='" + linkMedico + '\'' +
-                ", vacunados=" + vacunados +
                 '}';
     }
 }

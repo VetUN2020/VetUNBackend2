@@ -97,5 +97,10 @@ public class UsuarioController {
         return ResponseEntity.ok(cita);
     }
 
+    @GetMapping(value = {"/usuario/obtenerTipo"})
+    public ResponseEntity<?> obtenerTipos(){
+        List<TipoAtencion> atencion = tipoAtencionService.findAll();
+        return ResponseEntity.ok(atencion);
+    }
 
 }

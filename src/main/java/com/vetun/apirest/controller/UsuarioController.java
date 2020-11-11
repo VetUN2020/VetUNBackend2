@@ -77,7 +77,7 @@ public class UsuarioController {
         return ResponseEntity.ok(horarios);
     }
 
-    @GetMapping(value = {"pruebas/tiposAtencion"})
+    @GetMapping(value = {"usuario/tiposAtencion"})
     public ResponseEntity<?> obtenerTiposAtencion(){
 
         List<TipoAtencion> tiposAtencion = tipoAtencionService.findAll();

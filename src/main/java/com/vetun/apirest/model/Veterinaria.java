@@ -30,6 +30,9 @@ public class Veterinaria {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "idVeterinaria")
     private List<Medico> medicos;
 
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "idVeterinaria")
+    private List<ComentarioVeterinaria> comentarios;
 
     public Veterinaria() {
 
@@ -84,7 +87,13 @@ public class Veterinaria {
         this.medicos = medicos;
     }
 
+    public List<ComentarioVeterinaria> getComentarios() {
+        return comentarios;
+    }
 
+    public void setComentarios(List<ComentarioVeterinaria> comentarios) {
+        this.comentarios = comentarios;
+    }
 
     @Override
     public String toString() {

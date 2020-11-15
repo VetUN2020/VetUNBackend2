@@ -62,6 +62,11 @@ public class Medico {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "idMedico")
     private List<Costo> costos;
 
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "idMedico")
+    private List<ComentarioMedico> comentarios;
+
+
     public Medico() {
     }
 
@@ -175,6 +180,14 @@ public class Medico {
 
     public void setCostos(List<Costo> costos) {
         this.costos = costos;
+    }
+
+    public List<ComentarioMedico> getComentarios() {
+        return comentarios;
+    }
+
+    public void setComentarios(List<ComentarioMedico> comentarios) {
+        this.comentarios = comentarios;
     }
 
     @Override

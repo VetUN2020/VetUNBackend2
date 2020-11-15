@@ -39,6 +39,14 @@ public class Dueno {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "idDueno")
     private List<Mascota> mascotas;
 
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "idDueno")
+    private List<ComentarioMedico> comentariosM;
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "idDueno")
+    private List<ComentarioVeterinaria> comentariosV;
+
     public Dueno(){
 
     }
@@ -105,6 +113,22 @@ public class Dueno {
 
     public void setMascotas(List<Mascota> mascotas) {
         this.mascotas = mascotas;
+    }
+
+    public List<ComentarioMedico> getComentariosM() {
+        return comentariosM;
+    }
+
+    public void setComentariosM(List<ComentarioMedico> comentariosM) {
+        this.comentariosM = comentariosM;
+    }
+
+    public List<ComentarioVeterinaria> getComentariosV() {
+        return comentariosV;
+    }
+
+    public void setComentariosV(List<ComentarioVeterinaria> comentariosV) {
+        this.comentariosV = comentariosV;
     }
 
     @Override

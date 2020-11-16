@@ -1,9 +1,12 @@
 package com.vetun.apirest.service;
 
-import com.vetun.apirest.model.Cita;
 import com.vetun.apirest.model.Costo;
+import com.vetun.apirest.model.Medico;
+import com.vetun.apirest.model.TipoAtencion;
 import com.vetun.apirest.repository.CostoRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CostoService {
@@ -21,5 +24,7 @@ public class CostoService {
     public void save(Costo costo){
         costoRepository.save(costo);
     }
+
+    public List<Costo> findByIdMedico(Medico idMedico){ return costoRepository.findByIdMedico(idMedico); }
 
 }

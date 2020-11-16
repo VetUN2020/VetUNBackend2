@@ -7,10 +7,7 @@ import com.vetun.apirest.service.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.util.*;
@@ -22,15 +19,15 @@ public class UsuarioController {
     private MedicoService medicoService;
     private HoraAtencionService horaAtencionService;
     private CitaService citaService;
-    private TipoAtencionService tipoAtencionService;
+    private CostoService costoService;
 
-    public UsuarioController(UsuarioService usuarioService, DuenoService duenoService, MedicoService medicoService, HoraAtencionService horaAtencionService, CitaService citaService, TipoAtencionService tipoAtencionService) {
+    public UsuarioController(UsuarioService usuarioService, DuenoService duenoService, MedicoService medicoService, HoraAtencionService horaAtencionService, CitaService citaService, CostoService costoService) {
         this.usuarioService = usuarioService;
         this.duenoService = duenoService;
         this.medicoService = medicoService;
         this.horaAtencionService = horaAtencionService;
         this.citaService = citaService;
-        this.tipoAtencionService = tipoAtencionService;
+        this.costoService = costoService;
     }
 
     @GetMapping(value = {"/usuario"} )
@@ -77,16 +74,18 @@ public class UsuarioController {
         return ResponseEntity.ok(horarios);
     }
 
-    @GetMapping(value = {"usuario/tiposAtencion"})
-    public ResponseEntity<?> obtenerTiposAtencion(){
+    @GetMapping(value = {"usuario/costos/{medicoId}"})
+    public ResponseEntity<?> obtenerCostos(@PathVariable int medicoId){
 
-        List<TipoAtencion> tiposAtencion = tipoAtencionService.findAll();
+        Medico medico = medicoService.findById(medicoId);
 
-        if(tiposAtencion == null){
+        List<Costo> costos = costoService.findByIdMedico(medico);
+
+        if(costos == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return  ResponseEntity.ok(tiposAtencion);
+        return  ResponseEntity.ok(costos);
 
     }
 
@@ -97,10 +96,5 @@ public class UsuarioController {
         return ResponseEntity.ok(cita);
     }
 
-    @GetMapping(value = {"/usuario/obtenerTipo"})
-    public ResponseEntity<?> obtenerTipos(){
-        List<TipoAtencion> atencion = tipoAtencionService.findAll();
-        return ResponseEntity.ok(atencion);
-    }
 
 }

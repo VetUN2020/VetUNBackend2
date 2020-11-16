@@ -99,4 +99,14 @@ public class DuenoController {
         return ResponseEntity.ok(perfil);
     }
 
+    @GetMapping(value = {"/dueno/misCitas"})
+    public ResponseEntity<?> getMisCitas() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Usuario user = usuarioService.findByUsername(username);
+        Dueno dueno = duenoService.findByUsuarioIdUsuario(user.getIdUsuario());
+
+        return ResponseEntity.ok(dueno);
+    }
+
+
 }

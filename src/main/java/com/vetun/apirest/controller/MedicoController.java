@@ -23,14 +23,16 @@ public class MedicoController {
     private HoraAtencionService horaAtencionService;
     private PasswordEncoder passwordEncoder;
     private CostoService costoService;
+    private CitaService citaService;
 
-    public MedicoController(MedicoService medicoService, UsuarioService usuarioService, RolService rolService, HoraAtencionService horaAtencionService, PasswordEncoder passwordEncoder, CostoService costoService) {
+    public MedicoController(MedicoService medicoService, UsuarioService usuarioService, RolService rolService, HoraAtencionService horaAtencionService, PasswordEncoder passwordEncoder, CostoService costoService, CitaService citaService) {
         this.medicoService = medicoService;
         this.usuarioService = usuarioService;
         this.rolService = rolService;
         this.horaAtencionService = horaAtencionService;
         this.passwordEncoder = passwordEncoder;
         this.costoService = costoService;
+        this.citaService = citaService;
     }
 
     @GetMapping("/medicos/{medicoId}")
@@ -124,4 +126,14 @@ public class MedicoController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @GetMapping(value = {"/medico/misCitas"})
+    public ResponseEntity<?> getMisCitas() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Usuario user = usuarioService.findByUsername(username);
+        Medico medico = medicoService.findByUsuarioIdUsuario(user.getIdUsuario());
+
+        List<Cita> misCitas = citaService.findMisCitas(medico.getIdMedico());
+
+        return ResponseEntity.ok(misCitas);
+    }
 }

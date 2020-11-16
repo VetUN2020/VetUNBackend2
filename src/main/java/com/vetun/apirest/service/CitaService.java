@@ -28,4 +28,8 @@ public class CitaService {
     public List<Cita> findCitas(Date fechaCita, int idMedico){
         return citaRepository.findByFechaCitaAndIdMedicoIdMedico(fechaCita, idMedico);
     }
+
+    public List<Cita> findMisCitas(int idMedico){
+        return citaRepository.findByIdMedicoIdMedico( idMedico );
+    }
 }

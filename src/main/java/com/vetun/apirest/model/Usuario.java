@@ -38,6 +38,11 @@ public class Usuario {
     @JoinColumn(name = "correo_electronico" )
     private String correoElectronico;
 
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY, cascade =  CascadeType.ALL, mappedBy = "usuario")
+    private PasswordReset reset;
+
+
     public Usuario() {
     }
 

@@ -27,8 +27,9 @@ public class DuenoController {
     private CitaService citaService;
     private DuenoService medicoService;
     private HoraAtencionService horaAtencionService;
+    private MascotaService mascotaService;
 
-    public DuenoController(DuenoService duenoService, UsuarioService usuarioService, RolService rolService, PasswordEncoder passwordEncoder, CitaService citaService, DuenoService medicoService, HoraAtencionService horaAtencionService) {
+    public DuenoController(DuenoService duenoService, UsuarioService usuarioService, RolService rolService, PasswordEncoder passwordEncoder, CitaService citaService, DuenoService medicoService, HoraAtencionService horaAtencionService, MascotaService mascotaService) {
         this.duenoService = duenoService;
         this.usuarioService = usuarioService;
         this.rolService = rolService;
@@ -36,6 +37,7 @@ public class DuenoController {
         this.citaService = citaService;
         this.medicoService = medicoService;
         this.horaAtencionService = horaAtencionService;
+        this.mascotaService = mascotaService;
     }
 
     @PostMapping(value = {"/registro/nuevo-dueno/"})
@@ -105,7 +107,20 @@ public class DuenoController {
         Usuario user = usuarioService.findByUsername(username);
         Dueno dueno = duenoService.findByUsuarioIdUsuario(user.getIdUsuario());
 
-        return ResponseEntity.ok(dueno);
+        List<Mascota> mascotas = mascotaService.findByDueno(dueno.getIdDueno());
+
+        if(mascotas == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        List<Cita> citas = citaService.findMisCitasMascota(mascotas.get(0).getIdMascota());
+
+        for(int i = 1; i < mascotas.size(); i++){
+            List<Cita> temp = citaService.findMisCitasMascota(mascotas.get(i).getIdMascota());
+            citas.addAll(temp);
+        }
+
+        return ResponseEntity.ok(citas);
     }
 
 

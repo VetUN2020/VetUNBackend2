@@ -32,4 +32,8 @@ public class CitaService {
     public List<Cita> findMisCitas(int idMedico){
         return citaRepository.findByIdMedicoIdMedico( idMedico );
     }
+
+    public List<Cita> findMisCitasMascota(int idMascota){
+        return citaRepository.findByIdMascotaIdMascota(idMascota);
+    }
 }

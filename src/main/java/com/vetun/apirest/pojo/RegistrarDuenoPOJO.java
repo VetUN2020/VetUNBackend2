@@ -9,7 +9,7 @@ public class RegistrarDuenoPOJO {
     private String cedulaDueno;
     private String nombreDueno;
     private String apellidoDueno;
-    private int telefonoDueno;
+    private Long telefonoDueno;
     private String direccionDueno;
 
     public String getUsername() {
@@ -60,11 +60,11 @@ public class RegistrarDuenoPOJO {
         this.apellidoDueno = apellidoDueno;
     }
 
-    public int getTelefonoDueno() {
+    public Long getTelefonoDueno() {
         return telefonoDueno;
     }
 
-    public void setTelefonoDueno(int telefonoDueno) {
+    public void setTelefonoDueno(Long telefonoDueno) {
         this.telefonoDueno = telefonoDueno;
     }
 

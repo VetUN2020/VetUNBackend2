@@ -123,5 +123,4 @@ public class DuenoController {
         return ResponseEntity.ok(citas);
     }
 
-
 }

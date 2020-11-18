@@ -4,20 +4,23 @@ import java.sql.Timestamp;
 
 public class PruebasPOJO {
 
-    private String prueba;
+    private int idDueno;
 
-    public String getPrueba() {
-        return prueba;
+    private Long telefonoNuevo;
+
+    public int getIdDueno() {
+        return idDueno;
     }
 
-    public void setPrueba(String prueba) {
-        this.prueba = prueba;
+    public void setIdDueno(int idDueno) {
+        this.idDueno = idDueno;
     }
 
-    @Override
-    public String toString() {
-        return "PruebasPOJO{" +
-                "prueba='" + prueba + '\'' +
-                '}';
+    public Long getTelefonoNuevo() {
+        return telefonoNuevo;
+    }
+
+    public void setTelefonoNuevo(Long telefonoNuevo) {
+        this.telefonoNuevo = telefonoNuevo;
     }
 }

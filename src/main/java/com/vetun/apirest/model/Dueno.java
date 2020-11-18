@@ -30,7 +30,7 @@ public class Dueno {
     private String apellidoDueno;
 
     @Column(name="telefono_dueno")
-    private int telefonoDueno;
+    private Long telefonoDueno;
 
     @Column(name="direccion_dueno")
     private String direccionDueno;
@@ -91,11 +91,11 @@ public class Dueno {
         this.apellidoDueno = apellidoDueno;
     }
 
-    public int getTelefonoDueno() {
+    public Long getTelefonoDueno() {
         return telefonoDueno;
     }
 
-    public void setTelefonoDueno(int telefonoDueno) {
+    public void setTelefonoDueno(Long telefonoDueno) {
         this.telefonoDueno = telefonoDueno;
     }
 

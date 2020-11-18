@@ -10,7 +10,7 @@ public class RegistrarMedicoPOJO {
     private String nombreMedico;
     private String apellidoMedico;
     private String direccionMedico;
-    private int telefonoMedico;
+    private Long telefonoMedico;
     private String matriculaProfesional;
 
     public String getUsername() {
@@ -62,11 +62,11 @@ public class RegistrarMedicoPOJO {
     }
 
 
-    public int getTelefonoMedico() {
+    public Long getTelefonoMedico() {
         return telefonoMedico;
     }
 
-    public void setTelefonoMedico(int telefonoMedico) {
+    public void setTelefonoMedico(Long telefonoMedico) {
         this.telefonoMedico = telefonoMedico;
     }
 

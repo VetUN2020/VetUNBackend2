@@ -104,9 +104,7 @@ public class DuenoController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Usuario user = usuarioService.findByUsername(username);
         Dueno dueno = duenoService.findByUsuarioIdUsuario(user.getIdUsuario());
-
         return ResponseEntity.ok(dueno);
     }
-
 
 }

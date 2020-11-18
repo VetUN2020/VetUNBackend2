@@ -5,7 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 
 import javax.annotation.PostConstruct;
-import java.util.TimeZone;
+import java.sql.Time;
+import java.util.*;
 
 @SpringBootApplication
 public class ApirestApplication {
@@ -16,7 +17,6 @@ public class ApirestApplication {
 
     @PostConstruct
     void started() {
-        // set JVM timezone as UTC
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
     }
 

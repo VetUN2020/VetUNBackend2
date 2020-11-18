@@ -37,7 +37,7 @@ public class Medico {
     private String direccionMedico;
 
     @Column(name="telefono_medico")
-    private int telefonoMedico;
+    private Long telefonoMedico;
 
     @Column(name="matricula_profesional")
     private String matriculaProfesional;
@@ -126,11 +126,11 @@ public class Medico {
         this.direccionMedico = direccionMedico;
     }
 
-    public int getTelefonoMedico() {
+    public Long getTelefonoMedico() {
         return telefonoMedico;
     }
 
-    public void setTelefonoMedico(int telefonoMedico) {
+    public void setTelefonoMedico(Long telefonoMedico) {
         this.telefonoMedico = telefonoMedico;
     }
 

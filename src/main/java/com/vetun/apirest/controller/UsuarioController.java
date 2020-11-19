@@ -3,6 +3,7 @@ package com.vetun.apirest.controller;
 import com.vetun.apirest.email.EmailBody;
 import com.vetun.apirest.email.EmailPort;
 import com.vetun.apirest.model.*;
+import com.vetun.apirest.pojo.CambioContrasenaPOJO;
 import com.vetun.apirest.pojo.FechaCitaPOJO;
 import com.vetun.apirest.pojo.MenuBarUserPOJO;
 import com.vetun.apirest.pojo.RecuperarContrasenaPOJO;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +35,9 @@ public class UsuarioController {
 
     @Autowired
     private EmailPort emailPort;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public UsuarioController(UsuarioService usuarioService, DuenoService duenoService, MedicoService medicoService, HoraAtencionService horaAtencionService, CitaService citaService, CostoService costoService, PasswordResetService passwordResetService) {
         this.usuarioService = usuarioService;
@@ -111,12 +116,18 @@ public class UsuarioController {
     }
 
     @PostMapping(value = {"/recuperarContrasena"} )
-    public ResponseEntity<?> recuperarContrasena(@RequestBody RecuperarContrasenaPOJO correoElectronico){
-
+    public ResponseEntity<?> enviarCorreoRecuperacion(@RequestBody RecuperarContrasenaPOJO correoElectronico){
         Usuario user = usuarioService.findByCorreoElectronico(correoElectronico.getCorreoRecuperacion());
+
         if( user == null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        PasswordReset passwordExistente = passwordResetService.findByUsuario(user);
+
+        if(passwordExistente != null){
+            return  new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+
         String token = UUID.randomUUID().toString();
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("America/Bogota"));
         calendar.add(Calendar.DATE, 1);
@@ -137,11 +148,23 @@ public class UsuarioController {
         emailBody.setEmail(user.getCorreoElectronico());
         emailBody.setSubject("Recuperación de contraseña");
         emailBody.setContent("Link para recuperar contraseña: <br>" +
-                "<center>Que le pasa <br> <button style=\" text-decoration: none; padding: 10px;  color: #ffffff; background-color: #1883ba;  border-radius: 6px; border: 2px solid #0016b0; \"> <a href=\"http://localhost:8080/recuperarContraseña?token=" + token + " \" target=\"_blank\" style=\" color:#ffffff;\">Clic aqui</a> <button> </center>"
+                "<center>Que le pasa <br> <button style=\" text-decoration: none; padding: 10px;  color: #ffffff; background-color: #1883ba;  border-radius: 6px; border: 2px solid #0016b0; \"> <a href=\"http://localhost:8080/nuevaContrasenia?token=" + token + " \" target=\"_blank\" style=\" color:#ffffff;\">Clic aqui</a> <button> </center>"
         );
         emailPort.sendEmail(emailBody);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = {"/nuevaContrasena"} )
+    public ResponseEntity<?> nuevaContrasena(@RequestBody CambioContrasenaPOJO cambioContrasenaPOJO){
+        PasswordReset passwordReset = passwordResetService.findByToken(cambioContrasenaPOJO.getToken());
+        Usuario user = passwordReset.getUsuario();
+        user.setPassword(passwordEncoder.encode(cambioContrasenaPOJO.getNuevaContrasena()));
+
+        passwordResetService.delete(passwordReset.getIdToken());
+        usuarioService.save(user);
+
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
 }

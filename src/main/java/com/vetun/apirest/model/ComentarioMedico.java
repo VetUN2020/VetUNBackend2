@@ -14,7 +14,6 @@ public class ComentarioMedico {
     private int idComentarioMedico;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name="id_dueno")
     private Dueno idDueno;
 

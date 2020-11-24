@@ -1,12 +1,12 @@
 package com.vetun.apirest.controller;
 
-import com.vetun.apirest.model.Medico;
-import com.vetun.apirest.model.Usuario;
-import com.vetun.apirest.model.Veterinaria;
+import com.vetun.apirest.model.*;
 import com.vetun.apirest.pojo.PerfilVeterinariaPOJO;
 import com.vetun.apirest.pojo.RegistrarVeterinariaPOJO;
+import com.vetun.apirest.repository.ComentarioVeterinariaRepository;
 import com.vetun.apirest.repository.MedicoRepository;
 import com.vetun.apirest.repository.UsuarioRepository;
+import com.vetun.apirest.service.ComentarioVeterinariaService;
 import com.vetun.apirest.service.MedicoService;
 import com.vetun.apirest.service.UsuarioService;
 import com.vetun.apirest.service.VeterinariaService;
@@ -25,13 +25,15 @@ public class VeterinariaController {
     private UsuarioRepository usuarioRepository;
     private MedicoService medicoService;
     private MedicoRepository medicoRepository;
+    private ComentarioVeterinariaService comentarioVeterinariaService;
 
-    public VeterinariaController(VeterinariaService veterinariaService, UsuarioService usuarioService, UsuarioRepository usuarioRepository, MedicoService medicoService, MedicoRepository medicoRepository) {
+    public VeterinariaController(VeterinariaService veterinariaService, UsuarioService usuarioService, UsuarioRepository usuarioRepository, MedicoService medicoService, MedicoRepository medicoRepository, ComentarioVeterinariaService comentarioVeterinariaService) {
         this.veterinariaService = veterinariaService;
         this.usuarioService = usuarioService;
         this.usuarioRepository = usuarioRepository;
         this.medicoService = medicoService;
         this.medicoRepository = medicoRepository;
+        this.comentarioVeterinariaService = comentarioVeterinariaService;
     }
 
     @GetMapping("/veterinarias")
@@ -91,6 +93,21 @@ public class VeterinariaController {
 
 
         return ResponseEntity.ok(perfilVeterinaria);
+    }
+
+    @GetMapping(value = {"/calificaciones/veterinaria/{veterinariaId}"})
+    public ResponseEntity<?> getComentarios(@PathVariable int veterinariaId) {
+        List<ComentarioVeterinaria> comentariosVeterinaria = comentarioVeterinariaService.findComentariosVeterinaria(veterinariaId);
+
+        return ResponseEntity.ok(comentariosVeterinaria);
+    }
+
+    @PostMapping(value = "/calificar/veterinaria")
+    public ResponseEntity<?> agregarComentario(@RequestBody ComentarioVeterinaria comentarioVeterinaria){
+
+        comentarioVeterinariaService.save(comentarioVeterinaria);
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 

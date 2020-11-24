@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ComentarioMedicoRepository extends JpaRepository<ComentarioMedico, Integer> {
 
-    ComentarioMedico findByIdDuenoAndIdMedico(int iddueno, int idmedico);
+    ComentarioMedico findByIdDuenoIdDuenoAndIdMedicoIdMedico(int iddueno, int idmedico);
 
     List<ComentarioMedico> findByIdMedicoIdMedico(int idmedico);
 

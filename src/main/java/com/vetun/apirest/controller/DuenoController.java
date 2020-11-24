@@ -90,6 +90,7 @@ public class DuenoController {
 
         PerfilDuenoPOJO perfil = new PerfilDuenoPOJO();
 
+        perfil.setIdDueno(dueno.getIdDueno());
         perfil.setCedulaDueno(dueno.getCedulaDueno());
         perfil.setNombreDueno(dueno.getNombreDueno());
         perfil.setApellidoDueno(dueno.getApellidoDueno());

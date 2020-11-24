@@ -139,11 +139,19 @@ public class MedicoController {
         return ResponseEntity.ok(misCitas);
     }
 
-    @GetMapping(value = {"/medico/{medicoId}/comentarios"})
+    @GetMapping(value = {"/calificaciones/medico/{medicoId}"})
     public ResponseEntity<?> getComentarios(@PathVariable int medicoId) {
         List<ComentarioMedico> comentariosMedico = comentarioMedicoService.findComentariosMedico(medicoId);
 
         return ResponseEntity.ok(comentariosMedico);
+    }
+
+    @PostMapping(value = "/calificar/medico")
+    public ResponseEntity<?> agregarComentario(@RequestBody ComentarioMedico comentarioMedico){
+
+        comentarioMedicoService.save(comentarioMedico);
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 }

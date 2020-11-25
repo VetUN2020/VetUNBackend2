@@ -2,6 +2,7 @@ package com.vetun.apirest.pojo;
 
 public class PerfilDuenoPOJO {
 
+    private int idDueno;
     private String nombreDueno;
     private String apellidoDueno;
     private String cedulaDueno;
@@ -12,6 +13,10 @@ public class PerfilDuenoPOJO {
 
     public PerfilDuenoPOJO() {
     }
+
+    public int getIdDueno(){return idDueno;}
+
+    public void setIdDueno(int idDueno){this.idDueno = idDueno;}
 
     public String getNombreDueno() {
         return nombreDueno;

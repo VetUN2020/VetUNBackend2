@@ -25,8 +25,9 @@ public class MedicoController {
     private CostoService costoService;
     private CitaService citaService;
     private ComentarioMedicoService comentarioMedicoService;
+    private DuenoService duenoService;
 
-    public MedicoController(MedicoService medicoService, UsuarioService usuarioService, RolService rolService, HoraAtencionService horaAtencionService, PasswordEncoder passwordEncoder, CostoService costoService, CitaService citaService, ComentarioMedicoService comentarioMedicoService) {
+    public MedicoController(MedicoService medicoService, DuenoService duenoService, UsuarioService usuarioService, RolService rolService, HoraAtencionService horaAtencionService, PasswordEncoder passwordEncoder, CostoService costoService, CitaService citaService, ComentarioMedicoService comentarioMedicoService) {
         this.medicoService = medicoService;
         this.usuarioService = usuarioService;
         this.rolService = rolService;
@@ -34,6 +35,7 @@ public class MedicoController {
         this.passwordEncoder = passwordEncoder;
         this.costoService = costoService;
         this.citaService = citaService;
+        this.duenoService = duenoService;
         this.comentarioMedicoService = comentarioMedicoService;
     }
 
@@ -146,8 +148,14 @@ public class MedicoController {
         return ResponseEntity.ok(comentariosMedico);
     }
 
-    @PostMapping(value = "/calificar/medico")
+    @PostMapping(value = "/dueno/calificar/medico")
     public ResponseEntity<?> agregarComentario(@RequestBody ComentarioMedico comentarioMedico){
+
+        String username = SecurityContextHolder.getContext( ).getAuthentication( ).getName( );
+        Usuario user = usuarioService.findByUsername(username);
+        Dueno dueno = duenoService.findByUsuarioIdUsuario(user.getIdUsuario());
+
+        comentarioMedico.setIdDueno(dueno);
 
         comentarioMedicoService.save(comentarioMedico);
 

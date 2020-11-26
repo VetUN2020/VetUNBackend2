@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -109,13 +110,8 @@ public class DuenoController {
 
         List<Mascota> mascotas = mascotaService.findByDueno(dueno.getIdDueno());
 
-        if(mascotas == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        List<Cita> citas = citaService.findMisCitasMascota(mascotas.get(0).getIdMascota());
-
-        for(int i = 1; i < mascotas.size(); i++){
+        List<Cita> citas = new ArrayList<>();
+        for(int i = 0; i < mascotas.size(); i++){
             List<Cita> temp = citaService.findMisCitasMascota(mascotas.get(i).getIdMascota());
             citas.addAll(temp);
         }

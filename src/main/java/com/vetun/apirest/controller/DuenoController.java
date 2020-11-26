@@ -26,18 +26,14 @@ public class DuenoController {
     private RolService rolService;
     private PasswordEncoder passwordEncoder;
     private CitaService citaService;
-    private DuenoService medicoService;
-    private HoraAtencionService horaAtencionService;
     private MascotaService mascotaService;
 
-    public DuenoController(DuenoService duenoService, UsuarioService usuarioService, RolService rolService, PasswordEncoder passwordEncoder, CitaService citaService, DuenoService medicoService, HoraAtencionService horaAtencionService, MascotaService mascotaService) {
+    public DuenoController(DuenoService duenoService, UsuarioService usuarioService, RolService rolService, PasswordEncoder passwordEncoder, CitaService citaService, MascotaService mascotaService) {
         this.duenoService = duenoService;
         this.usuarioService = usuarioService;
         this.rolService = rolService;
         this.passwordEncoder = passwordEncoder;
         this.citaService = citaService;
-        this.medicoService = medicoService;
-        this.horaAtencionService = horaAtencionService;
         this.mascotaService = mascotaService;
     }
 

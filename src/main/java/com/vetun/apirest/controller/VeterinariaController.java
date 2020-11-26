@@ -6,10 +6,7 @@ import com.vetun.apirest.pojo.RegistrarVeterinariaPOJO;
 import com.vetun.apirest.repository.ComentarioVeterinariaRepository;
 import com.vetun.apirest.repository.MedicoRepository;
 import com.vetun.apirest.repository.UsuarioRepository;
-import com.vetun.apirest.service.ComentarioVeterinariaService;
-import com.vetun.apirest.service.MedicoService;
-import com.vetun.apirest.service.UsuarioService;
-import com.vetun.apirest.service.VeterinariaService;
+import com.vetun.apirest.service.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,14 +22,16 @@ public class VeterinariaController {
     private UsuarioRepository usuarioRepository;
     private MedicoService medicoService;
     private MedicoRepository medicoRepository;
+    private DuenoService duenoService;
     private ComentarioVeterinariaService comentarioVeterinariaService;
 
-    public VeterinariaController(VeterinariaService veterinariaService, UsuarioService usuarioService, UsuarioRepository usuarioRepository, MedicoService medicoService, MedicoRepository medicoRepository, ComentarioVeterinariaService comentarioVeterinariaService) {
+    public VeterinariaController(VeterinariaService veterinariaService, UsuarioService usuarioService, UsuarioRepository usuarioRepository, MedicoService medicoService, MedicoRepository medicoRepository, DuenoService duenoService, ComentarioVeterinariaService comentarioVeterinariaService) {
         this.veterinariaService = veterinariaService;
         this.usuarioService = usuarioService;
         this.usuarioRepository = usuarioRepository;
         this.medicoService = medicoService;
         this.medicoRepository = medicoRepository;
+        this.duenoService = duenoService;
         this.comentarioVeterinariaService = comentarioVeterinariaService;
     }
 
@@ -102,9 +101,13 @@ public class VeterinariaController {
         return ResponseEntity.ok(comentariosVeterinaria);
     }
 
-    @PostMapping(value = "/calificar/veterinaria")
+    @PostMapping(value = "/dueno/calificar/veterinaria")
     public ResponseEntity<?> agregarComentario(@RequestBody ComentarioVeterinaria comentarioVeterinaria){
+        String username = SecurityContextHolder.getContext( ).getAuthentication( ).getName( );
+        Usuario user = usuarioService.findByUsername(username);
+        Dueno dueno = duenoService.findByUsuarioIdUsuario(user.getIdUsuario());
 
+        comentarioVeterinaria.setIdDueno(dueno);
         comentarioVeterinariaService.save(comentarioVeterinaria);
 
         return new ResponseEntity<>(HttpStatus.CREATED);

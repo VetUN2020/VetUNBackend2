@@ -24,8 +24,9 @@ public class MedicoController {
     private PasswordEncoder passwordEncoder;
     private CostoService costoService;
     private CitaService citaService;
+    private ComentarioMedicoService comentarioMedicoService;
 
-    public MedicoController(MedicoService medicoService, UsuarioService usuarioService, RolService rolService, HoraAtencionService horaAtencionService, PasswordEncoder passwordEncoder, CostoService costoService, CitaService citaService) {
+    public MedicoController(MedicoService medicoService, UsuarioService usuarioService, RolService rolService, HoraAtencionService horaAtencionService, PasswordEncoder passwordEncoder, CostoService costoService, CitaService citaService, ComentarioMedicoService comentarioMedicoService) {
         this.medicoService = medicoService;
         this.usuarioService = usuarioService;
         this.rolService = rolService;
@@ -33,6 +34,7 @@ public class MedicoController {
         this.passwordEncoder = passwordEncoder;
         this.costoService = costoService;
         this.citaService = citaService;
+        this.comentarioMedicoService = comentarioMedicoService;
     }
 
     @GetMapping("/medicos/{medicoId}")
@@ -136,4 +138,20 @@ public class MedicoController {
 
         return ResponseEntity.ok(misCitas);
     }
+
+    @GetMapping(value = {"/calificaciones/medico/{medicoId}"})
+    public ResponseEntity<?> getComentarios(@PathVariable int medicoId) {
+        List<ComentarioMedico> comentariosMedico = comentarioMedicoService.findComentariosMedico(medicoId);
+
+        return ResponseEntity.ok(comentariosMedico);
+    }
+
+    @PostMapping(value = "/calificar/medico")
+    public ResponseEntity<?> agregarComentario(@RequestBody ComentarioMedico comentarioMedico){
+
+        comentarioMedicoService.save(comentarioMedico);
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
 }

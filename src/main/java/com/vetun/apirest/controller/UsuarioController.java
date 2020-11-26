@@ -125,7 +125,7 @@ public class UsuarioController {
         PasswordReset passwordExistente = passwordResetService.findByUsuario(user);
 
         if(passwordExistente != null){
-            return  new ResponseEntity<>(HttpStatus.CONFLICT);
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
         String token = UUID.randomUUID().toString();

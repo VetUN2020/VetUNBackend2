@@ -49,44 +49,44 @@ public class UsuarioController {
         this.passwordResetService = passwordResetService;
     }
 
-    @GetMapping(value = {"/usuario"} )
-    public ResponseEntity<?> getUserAuthenticated(){
-        String username = SecurityContextHolder.getContext( ).getAuthentication( ).getName( );
+    @GetMapping(value = {"/usuario"})
+    public ResponseEntity<?> getUserAuthenticated() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Usuario userAuth = usuarioService.findByUsername(username);
-        String rol= userAuth.getRol().getNombreRol();
+        String rol = userAuth.getRol().getNombreRol();
         MenuBarUserPOJO user = new MenuBarUserPOJO();
         user.setRolUsuario(rol);
 
-        if(rol.equals("DUENO")){
+        if (rol.equals("DUENO")) {
             Dueno dueno = duenoService.findByUsuarioIdUsuario(userAuth.getIdUsuario());
             user.setNombreUsuario(dueno.getNombreDueno());
             user.setApellidoUsuario(dueno.getApellidoDueno());
-        }else{
+        } else {
             Medico medico = medicoService.findByUsuarioIdUsuario(userAuth.getIdUsuario());
             user.setNombreUsuario(medico.getNombreMedico());
             user.setApellidoUsuario(medico.getApellidoMedico());
         }
-        
+
         return ResponseEntity.ok(user);
     }
 
     @PostMapping(value = {"/usuario/horasDisponibles"})
-    public ResponseEntity<?> obtenerHorasDisponibles(@RequestBody FechaCitaPOJO fechaCita){
-        String username = SecurityContextHolder.getContext( ).getAuthentication( ).getName( );
+    public ResponseEntity<?> obtenerHorasDisponibles(@RequestBody FechaCitaPOJO fechaCita) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         Medico medico = medicoService.findById(fechaCita.getIdMedico());
         List<HoraAtencion> horarios = horaAtencionService.findByMedico(medico);
         List<Cita> citas = citaService.findCitas(fechaCita.getFechaCita(), fechaCita.getIdMedico());
 
 
-        List<HoraAtencion> horasRemover = new ArrayList<>() ;
+        List<HoraAtencion> horasRemover = new ArrayList<>();
 
-        for(Cita c: citas){
-         for(HoraAtencion h : horarios){
-             if(c.getHoraCita().equals(h.getHoraTiempo())){
-                 horasRemover.add(h);
-             }
-         }
+        for (Cita c : citas) {
+            for (HoraAtencion h : horarios) {
+                if (c.getHoraCita().equals(h.getHoraTiempo())) {
+                    horasRemover.add(h);
+                }
+            }
         }
         horarios.removeAll(horasRemover);
 
@@ -94,37 +94,37 @@ public class UsuarioController {
     }
 
     @GetMapping(value = {"usuario/costos/{medicoId}"})
-    public ResponseEntity<?> obtenerCostos(@PathVariable int medicoId){
+    public ResponseEntity<?> obtenerCostos(@PathVariable int medicoId) {
 
         Medico medico = medicoService.findById(medicoId);
 
         List<Costo> costos = costoService.findByIdMedico(medico);
 
-        if(costos == null){
+        if (costos == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return  ResponseEntity.ok(costos);
+        return ResponseEntity.ok(costos);
 
     }
 
     @PostMapping(value = {"/usuario/agendarCita"})
-    public ResponseEntity<?> agendarCita(@RequestBody Cita agendarCita){
+    public ResponseEntity<?> agendarCita(@RequestBody Cita agendarCita) {
         Cita cita = agendarCita;
         citaService.save(cita);
         return ResponseEntity.ok(cita);
     }
 
-    @PostMapping(value = {"/recuperarContrasena"} )
-    public ResponseEntity<?> enviarCorreoRecuperacion(@RequestBody RecuperarContrasenaPOJO correoElectronico){
+    @PostMapping(value = {"/recuperarContrasena"})
+    public ResponseEntity<?> enviarCorreoRecuperacion(@RequestBody RecuperarContrasenaPOJO correoElectronico) {
         Usuario user = usuarioService.findByCorreoElectronico(correoElectronico.getCorreoRecuperacion());
 
-        if( user == null){
+        if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         PasswordReset passwordExistente = passwordResetService.findByUsuario(user);
 
-        if(passwordExistente != null){
+        if (passwordExistente != null) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
@@ -133,7 +133,7 @@ public class UsuarioController {
         calendar.add(Calendar.DATE, 1);
         calendar.add(Calendar.HOUR_OF_DAY, -5);
         Date objDate = calendar.getTime();
-        java.sql.Date date=new java.sql.Date(objDate.getTime());
+        java.sql.Date date = new java.sql.Date(objDate.getTime());
         Time time = new Time(0);
 
         PasswordReset passwordReset = new PasswordReset();
@@ -147,16 +147,53 @@ public class UsuarioController {
 
         emailBody.setEmail(user.getCorreoElectronico());
         emailBody.setSubject("Recuperación de contraseña");
-        emailBody.setContent("Link para recuperar contraseña: <br>" +
-                "<center>Que le pasa <br> <button style=\" text-decoration: none; padding: 10px;  color: #ffffff; background-color: #1883ba;  border-radius: 6px; border: 2px solid #0016b0; \"> <a href=\"http://localhost:8080/nuevaContrasenia?token=" + token + " \" target=\"_blank\" style=\" color:#ffffff;\">Clic aqui</a> <button> </center>"
-        );
+        emailBody.setContent("<center>" +
+                "      <h2 style=\"font-family: Arial\"><b>Recuperación contraseña</b></h2>" +
+                "      <p style=\"font-family: Arial\">Hola, " + user.getUsername() + ":</p>" +
+                "      <p style=\"font-family: Arial\">" +
+                "        Recibimos tu solicitud para restablecer la contraseña :" +
+                "      </p>" +
+                "      <p style=\"font-family: Arial\">" +
+                "        Para restablecer tu contraseña, haz clic en el botón :" +
+                "      </p>" +
+                "      <button" +
+                "        style=\"" +
+                "          text-decoration: none;" +
+                "          padding: 10px;" +
+                "          color: #ffffff;" +
+                "          background-color: #1abc9c;" +
+                "          border-radius: 6px;" +
+                "          border: 1px solid black;" +
+                "          width: 100px;" +
+                "        \"" +
+                "      >" +
+                "        <a" +
+                "          href=\"http://localhost:8080/nuevaContrasenia?token=" + token + "\"" +
+                "          target=\"_blank\"" +
+                "          style=\"color: #ffffff; font-family: Calibri; font-size: 15px\"" +
+                "          >Clic aqui</a" +
+                "        >" +
+                "      </button>" +
+                "      <br />" +
+                "      <p style=\"font-family: Arial\">" +
+                "        O sigue el siguiente enlace a continuación :" +
+                "      </p>" +
+                "      <p>" +
+                "        <a" +
+                "          href=\"http://localhost:8080/nuevaContrasenia?token=" + token + "\"" +
+                "          target=\"_blank\"" +
+                "          style=\"color: blue; font-family: Calibri; font-size: 15px\"" +
+                "          >http://localhost:8080/nuevaContrasenia?token=" + token + "</a" +
+                "        >" +
+                "      </p>" +
+                "    </center>");
         emailPort.sendEmail(emailBody);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PostMapping(value = {"/nuevaContrasena"} )
-    public ResponseEntity<?> nuevaContrasena(@RequestBody CambioContrasenaPOJO cambioContrasenaPOJO){
+    @PostMapping(value = {"/nuevaContrasena"})
+    public ResponseEntity<?> nuevaContrasena(@RequestBody CambioContrasenaPOJO cambioContrasenaPOJO) {
         PasswordReset passwordReset = passwordResetService.findByToken(cambioContrasenaPOJO.getToken());
         Usuario user = passwordReset.getUsuario();
         user.setPassword(passwordEncoder.encode(cambioContrasenaPOJO.getNuevaContrasena()));

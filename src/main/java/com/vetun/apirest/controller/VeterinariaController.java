@@ -44,6 +44,7 @@ public class VeterinariaController {
     @PostMapping("usuario/registro-veterinaria")
     public ResponseEntity<?> addVeterinaria(@RequestBody RegistrarVeterinariaPOJO registrarVeterinaria) {
         Veterinaria veterinaria = veterinariaService.mapperVeterinariaEntity(registrarVeterinaria);
+        veterinaria.setDireccionVeterinaria(veterinaria.getDireccionVeterinaria() + ",Bogota, Colombia");
         veterinariaService.save(veterinaria);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

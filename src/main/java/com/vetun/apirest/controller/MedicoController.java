@@ -30,6 +30,9 @@ public class MedicoController {
     private ComentarioMedicoService comentarioMedicoService;
     private DuenoService duenoService;
 
+    @Autowired
+    private EmailPort emailPort;
+
     public MedicoController(MedicoService medicoService, DuenoService duenoService, UsuarioService usuarioService, RolService rolService, HoraAtencionService horaAtencionService, PasswordEncoder passwordEncoder, CostoService costoService, CitaService citaService, ComentarioMedicoService comentarioMedicoService) {
         this.medicoService = medicoService;
         this.usuarioService = usuarioService;
@@ -69,6 +72,25 @@ public class MedicoController {
         newUsuario.setMedico(nuevoMedico);
         nuevoMedico.setUsuario(newUsuario);
         usuarioService.save(newUsuario);
+
+        EmailBody emailBody = new EmailBody();
+
+        emailBody.setEmail(email);
+        emailBody.setSubject("Bienvenido a VetUN");
+        emailBody.setContent("<center>" +
+                "      <h2 style=\"font-family: Arial\"><b>Bienvenido a VetUN</b></h2>" +
+                "      <p style=\"font-family: Arial\">Hola, " + newUsuario.getUsername() + ":</p>" +
+                "      <p style=\"font-family: Arial\">" +
+                "        Estamos felices de que te unas a nuestro equipo." +
+                "      </p>" +
+                "      <p style=\"font-family: Arial\">" +
+                "        Con tu ayuda muchos animalitos seran felices" +
+                "      </p>" +
+                "      <p style=\"font-family: Arial\">" +
+                "        Gracias por hacer parte de nuestra familia" +
+                "      </p>" +
+                "    </center>");
+        emailPort.sendEmail(emailBody);
 
         return new ResponseEntity<>( HttpStatus.CREATED );
     }

@@ -27,7 +27,7 @@ public class Vacunacion {
     private Date fechaVacuna;
 
     public Vacunacion() {
-
+        //Necesary method
     }
 
     public int getIdVacuna() {

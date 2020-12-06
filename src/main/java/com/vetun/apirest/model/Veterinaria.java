@@ -36,7 +36,7 @@ public class Veterinaria {
     private List<ComentarioVeterinaria> comentarios;
 
     public Veterinaria() {
-
+        //Necesary method
     }
 
     public int getIdVeterinaria() {

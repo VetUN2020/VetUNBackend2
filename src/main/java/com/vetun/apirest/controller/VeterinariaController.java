@@ -3,10 +3,10 @@ package com.vetun.apirest.controller;
 import com.vetun.apirest.model.*;
 import com.vetun.apirest.pojo.PerfilVeterinariaPOJO;
 import com.vetun.apirest.pojo.RegistrarVeterinariaPOJO;
-import com.vetun.apirest.repository.ComentarioVeterinariaRepository;
 import com.vetun.apirest.repository.MedicoRepository;
 import com.vetun.apirest.repository.UsuarioRepository;
 import com.vetun.apirest.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,32 +17,30 @@ import java.util.List;
 @RestController
 public class VeterinariaController {
 
+    @Autowired
     private VeterinariaService veterinariaService;
+    @Autowired
     private UsuarioService usuarioService;
+    @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
     private MedicoService medicoService;
+    @Autowired
     private MedicoRepository medicoRepository;
+    @Autowired
     private DuenoService duenoService;
+    @Autowired
     private ComentarioVeterinariaService comentarioVeterinariaService;
 
-    public VeterinariaController(VeterinariaService veterinariaService, UsuarioService usuarioService, UsuarioRepository usuarioRepository, MedicoService medicoService, MedicoRepository medicoRepository, DuenoService duenoService, ComentarioVeterinariaService comentarioVeterinariaService) {
-        this.veterinariaService = veterinariaService;
-        this.usuarioService = usuarioService;
-        this.usuarioRepository = usuarioRepository;
-        this.medicoService = medicoService;
-        this.medicoRepository = medicoRepository;
-        this.duenoService = duenoService;
-        this.comentarioVeterinariaService = comentarioVeterinariaService;
-    }
 
     @GetMapping("/veterinarias")
-    public ResponseEntity<?> buscarVeterinarias(){
+    public ResponseEntity<Object> buscarVeterinarias(){
         List<Veterinaria> veterinarias = veterinariaService.findAll();
         return ResponseEntity.ok(veterinarias);
     }
 
     @PostMapping("usuario/registro-veterinaria")
-    public ResponseEntity<?> addVeterinaria(@RequestBody RegistrarVeterinariaPOJO registrarVeterinaria) {
+    public ResponseEntity<Object> addVeterinaria(@RequestBody RegistrarVeterinariaPOJO registrarVeterinaria) {
         Veterinaria veterinaria = veterinariaService.mapperVeterinariaEntity(registrarVeterinaria);
         veterinaria.setDireccionVeterinaria(veterinaria.getDireccionVeterinaria() + ",Bogota, Colombia");
         veterinariaService.save(veterinaria);
@@ -55,8 +53,6 @@ public class VeterinariaController {
         Usuario user = usuarioRepository.findByUsername(username);
         Medico medico = medicoRepository.findByUsuarioIdUsuario(user.getIdUsuario());
 
-        System.out.println(registrarVeterinaria);
-
         String nombreVeterinaria = registrarVeterinaria.getNombreVeterinaria();
         Veterinaria veterinaria = veterinariaService.findByNombreVeterinaria(nombreVeterinaria);
         medico.setIdVeterinaria(veterinaria);
@@ -66,7 +62,7 @@ public class VeterinariaController {
     }
 
     @GetMapping("/veterinarias/{veterinariaId}")
-    public ResponseEntity<?> getVeterinaria(@PathVariable int veterinariaId){
+    public ResponseEntity<Object> getVeterinaria(@PathVariable int veterinariaId){
         Veterinaria veterinaria = veterinariaService.findById(veterinariaId);
 
         if(veterinaria == null) {
@@ -77,7 +73,7 @@ public class VeterinariaController {
     }
 
     @GetMapping(value = {"/medico/perfil-veterinaria"})
-    public ResponseEntity<?> getVeterinariaPerfil(){
+    public ResponseEntity<Object> getVeterinariaPerfil(){
         String username = SecurityContextHolder.getContext( ).getAuthentication( ).getName( );
         Usuario user = usuarioService.findByUsername(username);
         Medico medico = medicoService.findByUsuarioIdUsuario(user.getIdUsuario());
@@ -91,19 +87,18 @@ public class VeterinariaController {
         perfilVeterinaria.setTelefonoVeterinaria(veterinaria.getTelefonoVeterinaria());
         perfilVeterinaria.setTipoVeterinaria(veterinaria.getTipoVeterinaria());
 
-
         return ResponseEntity.ok(perfilVeterinaria);
     }
 
     @GetMapping(value = {"/calificaciones/veterinaria/{veterinariaId}"})
-    public ResponseEntity<?> getComentarios(@PathVariable int veterinariaId) {
+    public ResponseEntity<Object> getComentarios(@PathVariable int veterinariaId) {
         List<ComentarioVeterinaria> comentariosVeterinaria = comentarioVeterinariaService.findComentariosVeterinaria(veterinariaId);
 
         return ResponseEntity.ok(comentariosVeterinaria);
     }
 
     @PostMapping(value = "/dueno/calificar/veterinaria")
-    public ResponseEntity<?> agregarComentario(@RequestBody ComentarioVeterinaria comentarioVeterinaria){
+    public ResponseEntity<Object> agregarComentario(@RequestBody ComentarioVeterinaria comentarioVeterinaria){
         String username = SecurityContextHolder.getContext( ).getAuthentication( ).getName( );
         Usuario user = usuarioService.findByUsername(username);
         Dueno dueno = duenoService.findByUsuarioIdUsuario(user.getIdUsuario());

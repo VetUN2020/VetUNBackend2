@@ -3,10 +3,8 @@ package com.vetun.apirest.controller;
 import com.vetun.apirest.email.EmailBody;
 import com.vetun.apirest.email.EmailPort;
 import com.vetun.apirest.model.*;
-import com.vetun.apirest.pojo.PerfilDuenoPOJO;
 import com.vetun.apirest.pojo.PerfilMedicoPOJO;
 import com.vetun.apirest.pojo.RegistrarMedicoPOJO;
-import com.vetun.apirest.repository.HoraAtencionRepository;
 import com.vetun.apirest.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,33 +18,29 @@ import java.util.List;
 @RestController
 public class MedicoController {
 
+    @Autowired
     private MedicoService medicoService;
+    @Autowired
     private UsuarioService usuarioService;
+    @Autowired
     private RolService rolService;
+    @Autowired
     private HoraAtencionService horaAtencionService;
+    @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
     private CostoService costoService;
+    @Autowired
     private CitaService citaService;
+    @Autowired
     private ComentarioMedicoService comentarioMedicoService;
+    @Autowired
     private DuenoService duenoService;
-
     @Autowired
     private EmailPort emailPort;
 
-    public MedicoController(MedicoService medicoService, DuenoService duenoService, UsuarioService usuarioService, RolService rolService, HoraAtencionService horaAtencionService, PasswordEncoder passwordEncoder, CostoService costoService, CitaService citaService, ComentarioMedicoService comentarioMedicoService) {
-        this.medicoService = medicoService;
-        this.usuarioService = usuarioService;
-        this.rolService = rolService;
-        this.horaAtencionService = horaAtencionService;
-        this.passwordEncoder = passwordEncoder;
-        this.costoService = costoService;
-        this.citaService = citaService;
-        this.duenoService = duenoService;
-        this.comentarioMedicoService = comentarioMedicoService;
-    }
-
     @GetMapping("/medicos/{medicoId}")
-    public ResponseEntity<?>getMedico(@PathVariable int medicoId){
+    public ResponseEntity<Object>getMedico(@PathVariable int medicoId){
         Medico medico = medicoService.findById(medicoId);
         if(medico == null) {
             return new ResponseEntity<>( HttpStatus.NO_CONTENT );
@@ -95,7 +89,7 @@ public class MedicoController {
         return new ResponseEntity<>( HttpStatus.CREATED );
     }
     @GetMapping(value = {"/medico/perfil"})
-    public ResponseEntity<?> getMedicoPerfil(){
+    public ResponseEntity<Object> getMedicoPerfil(){
         String username = SecurityContextHolder.getContext( ).getAuthentication( ).getName( );
         Usuario user = usuarioService.findByUsername(username);
         Medico medico = medicoService.findByUsuarioIdUsuario(user.getIdUsuario());
@@ -115,7 +109,7 @@ public class MedicoController {
     }
 
     @PutMapping(value = {"/medico/agregarHora"})
-    public ResponseEntity<?> agregarHorasDisponibles(@RequestBody List<HoraAtencion> horaAtencions){
+    public ResponseEntity<Object> agregarHorasDisponibles(@RequestBody List<HoraAtencion> horaAtencions){
         String username = SecurityContextHolder.getContext( ).getAuthentication( ).getName( );
         Usuario user = usuarioService.findByUsername(username);
         Medico medico = medicoService.findByUsuarioIdUsuario(user.getIdUsuario());
@@ -128,13 +122,13 @@ public class MedicoController {
     }
 
     @GetMapping(value = "/medicos")
-    public ResponseEntity<?> buscarMedico(){
+    public ResponseEntity<Object> buscarMedico(){
         List<Medico> medicos = medicoService.findAll();
         return ResponseEntity.ok(medicos);
     }
 
     @GetMapping(value = "/medicoIdVet/{idVeterniaria}")
-    public ResponseEntity<?> buscarMedicoSegunIdVeterinaria(@PathVariable("idVeterniaria") int id){
+    public ResponseEntity<Object> buscarMedicoSegunIdVeterinaria(@PathVariable("idVeterniaria") int id){
         List<Medico> medicos = medicoService.findByIdVeterinaria(id);
         if(medicos == null) {
             return new ResponseEntity<>( HttpStatus.NO_CONTENT );
@@ -143,7 +137,7 @@ public class MedicoController {
     }
 
     @PostMapping(value = "/medico/agregarPrecios")
-    public ResponseEntity<?> agregarPreciosCitas(@RequestBody List<Costo> costosCitas){
+    public ResponseEntity<Object> agregarPreciosCitas(@RequestBody List<Costo> costosCitas){
         String username = SecurityContextHolder.getContext( ).getAuthentication( ).getName( );
         Usuario user = usuarioService.findByUsername(username);
         Medico medico = medicoService.findByUsuarioIdUsuario(user.getIdUsuario());
@@ -156,7 +150,7 @@ public class MedicoController {
     }
 
     @GetMapping(value = {"/medico/misCitas"})
-    public ResponseEntity<?> getMisCitas() {
+    public ResponseEntity<Object> getMisCitas() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Usuario user = usuarioService.findByUsername(username);
         Medico medico = medicoService.findByUsuarioIdUsuario(user.getIdUsuario());
@@ -167,14 +161,14 @@ public class MedicoController {
     }
 
     @GetMapping(value = {"/calificaciones/medico/{medicoId}"})
-    public ResponseEntity<?> getComentarios(@PathVariable int medicoId) {
+    public ResponseEntity<Object> getComentarios(@PathVariable int medicoId) {
         List<ComentarioMedico> comentariosMedico = comentarioMedicoService.findComentariosMedico(medicoId);
 
         return ResponseEntity.ok(comentariosMedico);
     }
 
     @PostMapping(value = "/dueno/calificar/medico")
-    public ResponseEntity<?> agregarComentario(@RequestBody ComentarioMedico comentarioMedico){
+    public ResponseEntity<Object> agregarComentario(@RequestBody ComentarioMedico comentarioMedico){
         String username = SecurityContextHolder.getContext( ).getAuthentication( ).getName( );
         Usuario user = usuarioService.findByUsername(username);
         Dueno dueno = duenoService.findByUsuarioIdUsuario(user.getIdUsuario());

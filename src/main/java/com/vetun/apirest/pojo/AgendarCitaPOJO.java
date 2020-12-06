@@ -10,6 +10,7 @@ public class AgendarCitaPOJO {
     private String modalidadCita;
 
     public AgendarCitaPOJO() {
+        //Necesary code
     }
 
     public int getIdMedico() {

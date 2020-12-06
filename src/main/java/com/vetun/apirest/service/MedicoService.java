@@ -1,9 +1,6 @@
 package com.vetun.apirest.service;
 
-import com.vetun.apirest.model.Dueno;
-import com.vetun.apirest.model.HoraAtencion;
 import com.vetun.apirest.model.Medico;
-import com.vetun.apirest.pojo.RegistrarDuenoPOJO;
 import com.vetun.apirest.pojo.RegistrarMedicoPOJO;
 import com.vetun.apirest.repository.MedicoRepository;
 import org.springframework.stereotype.Service;

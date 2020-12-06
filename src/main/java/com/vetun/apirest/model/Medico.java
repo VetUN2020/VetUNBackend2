@@ -69,6 +69,7 @@ public class Medico {
 
 
     public Medico() {
+        //Necesary method
     }
 
     public int getIdMedico() {

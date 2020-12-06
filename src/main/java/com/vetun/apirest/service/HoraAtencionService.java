@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class HoraAtencionService {
 
-    public HoraAtencionRepository horaAtencionRepository;
+    private HoraAtencionRepository horaAtencionRepository;
 
     public HoraAtencionService(HoraAtencionRepository horaAtencionRepository) {
         this.horaAtencionRepository = horaAtencionRepository;

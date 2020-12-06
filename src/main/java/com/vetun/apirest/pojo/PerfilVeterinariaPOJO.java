@@ -10,6 +10,7 @@ public class PerfilVeterinariaPOJO {
     private String tipoVeterinaria;
 
     public PerfilVeterinariaPOJO() {
+        //Necesary code
     }
 
     public int getIdVeterinaria() {

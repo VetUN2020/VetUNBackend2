@@ -1,8 +1,6 @@
 package com.vetun.apirest.service;
 
-import com.vetun.apirest.model.Dueno;
 import com.vetun.apirest.model.Mascota;
-import com.vetun.apirest.pojo.RegistrarDuenoPOJO;
 import com.vetun.apirest.pojo.RegistrarMascotaPOJO;
 import com.vetun.apirest.repository.MascotaRepository;
 import org.springframework.stereotype.Service;
@@ -12,7 +10,7 @@ import java.util.List;
 @Service
 public class MascotaService {
 
-    public MascotaRepository  mascotaRepository;
+    private MascotaRepository  mascotaRepository;
 
     public MascotaService( MascotaRepository mascotaRepository ){
         this.mascotaRepository = mascotaRepository;

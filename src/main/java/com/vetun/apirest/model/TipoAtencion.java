@@ -27,6 +27,7 @@ public class TipoAtencion {
     private List<Cita> citas;
 
     public TipoAtencion() {
+        //Necesary method
     }
 
     public TipoAtencion(int idAtencion, String descripcionAtencion) {

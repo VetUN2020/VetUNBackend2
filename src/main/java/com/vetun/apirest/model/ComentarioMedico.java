@@ -1,7 +1,5 @@
 package com.vetun.apirest.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 
 @Entity
@@ -28,6 +26,7 @@ public class ComentarioMedico {
     private float puntuacionM;
 
     public ComentarioMedico(){
+        //Necesary method
     }
 
     public int getIdComentarioMedico() {

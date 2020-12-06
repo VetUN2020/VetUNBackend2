@@ -21,7 +21,7 @@ public class Rol {
     private List<Usuario> usuarios;
 
     public Rol() {
-
+        //Necesary method
     }
 
     public int getIdRol() {

@@ -27,6 +27,7 @@ public class PasswordReset {
     private Time horaExpiracion;
 
     public PasswordReset() {
+        //Necesary method
     }
 
     public int getIdToken() {

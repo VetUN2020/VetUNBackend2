@@ -3,9 +3,7 @@ package com.vetun.apirest.controller;
 import com.vetun.apirest.email.EmailBody;
 import com.vetun.apirest.email.EmailPort;
 import com.vetun.apirest.model.*;
-import com.vetun.apirest.pojo.AgendarCitaPOJO;
 import com.vetun.apirest.pojo.PerfilDuenoPOJO;
-import com.vetun.apirest.pojo.PruebasPOJO;
 import com.vetun.apirest.pojo.RegistrarDuenoPOJO;
 import com.vetun.apirest.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,36 +13,28 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class DuenoController {
-
+    @Autowired
     private DuenoService duenoService;
+    @Autowired
     private UsuarioService usuarioService;
+    @Autowired
     private RolService rolService;
+    @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
     private CitaService citaService;
+    @Autowired
     private MascotaService mascotaService;
-
     @Autowired
     private EmailPort emailPort;
 
-    public DuenoController(DuenoService duenoService, UsuarioService usuarioService, RolService rolService, PasswordEncoder passwordEncoder, CitaService citaService, MascotaService mascotaService) {
-        this.duenoService = duenoService;
-        this.usuarioService = usuarioService;
-        this.rolService = rolService;
-        this.passwordEncoder = passwordEncoder;
-        this.citaService = citaService;
-        this.mascotaService = mascotaService;
-    }
-
     @PostMapping(value = {"/registro/nuevo-dueno/"})
-    public ResponseEntity<Void> registerNewUser(@RequestBody RegistrarDuenoPOJO duenoPOJO) {
+    public ResponseEntity<Object> registerNewUser(@RequestBody RegistrarDuenoPOJO duenoPOJO) {
         Rol rol = rolService.findById(1);
         duenoPOJO.setPassword(passwordEncoder.encode(duenoPOJO.getPassword()));
         Dueno existingDueno = duenoService.findByCedulaDueno(duenoPOJO.getCedulaDueno());
@@ -85,7 +75,7 @@ public class DuenoController {
     }
 
     @GetMapping(value = {"/dueno/mascotas"})
-    public ResponseEntity<?> getMascotas() {
+    public ResponseEntity<Object> getMascotas() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Usuario user = usuarioService.findByUsername(username);
         Dueno dueno = duenoService.findByUsuarioIdUsuario(user.getIdUsuario());
@@ -99,13 +89,13 @@ public class DuenoController {
     }
 
     @GetMapping(value = {"pruebas/{duenoId}"})
-    public ResponseEntity<?> getDuenoById(@PathVariable int duenoId) {
+    public ResponseEntity<Object> getDuenoById(@PathVariable int duenoId) {
         Dueno dueno = duenoService.findById(duenoId);
         return ResponseEntity.ok(dueno);
     }
 
     @GetMapping(value = {"/dueno/perfil"})
-    public ResponseEntity<?> getDuenoPerfil() {
+    public ResponseEntity<Object> getDuenoPerfil() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Usuario user = usuarioService.findByUsername(username);
         Dueno dueno = duenoService.findByUsuarioIdUsuario(user.getIdUsuario());
@@ -125,7 +115,7 @@ public class DuenoController {
     }
 
     @GetMapping(value = {"/dueno/misCitas"})
-    public ResponseEntity<?> getMisCitas() {
+    public ResponseEntity<Object> getMisCitas() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Usuario user = usuarioService.findByUsername(username);
         Dueno dueno = duenoService.findByUsuarioIdUsuario(user.getIdUsuario());

@@ -28,6 +28,7 @@ public class HoraAtencion {
     private Time horaTiempo;
 
     public HoraAtencion() {
+        //Necesary method
     }
 
     public int getIdHora() {

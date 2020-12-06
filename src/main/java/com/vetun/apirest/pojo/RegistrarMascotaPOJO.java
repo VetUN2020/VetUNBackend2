@@ -1,7 +1,5 @@
 package com.vetun.apirest.pojo;
 
-import javax.persistence.Column;
-
 public class RegistrarMascotaPOJO {
 
     private String nombreMascota;

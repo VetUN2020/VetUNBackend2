@@ -1,12 +1,10 @@
 package com.vetun.apirest.model;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.springframework.data.annotation.CreatedBy;
 
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Time;
-import java.sql.Timestamp;
 
 @Entity
 @Table(name="cita")
@@ -41,7 +39,7 @@ public class Cita {
     private String modalidadCita;
 
     public Cita() {
-
+    //Necesary method
     }
 
     public Cita(int idCita, Medico idMedico, Mascota idMascota, TipoAtencion idAtencion, Date fechaCita, Time horaCita, String modalidadCita) {

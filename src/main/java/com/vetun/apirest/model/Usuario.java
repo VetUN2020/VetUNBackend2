@@ -1,11 +1,9 @@
 package com.vetun.apirest.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
+
 
 @Entity
 @Table(name="usuario")
@@ -44,6 +42,7 @@ public class Usuario {
 
 
     public Usuario() {
+        //Necesary method
     }
 
     public Usuario(int idUsuario, Dueno dueno, Medico medico, Rol rol, String username, String password, String correoElectronico) {

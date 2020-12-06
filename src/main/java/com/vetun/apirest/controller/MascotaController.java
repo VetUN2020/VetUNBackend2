@@ -6,6 +6,7 @@ import com.vetun.apirest.model.Usuario;
 import com.vetun.apirest.pojo.RegistrarMascotaPOJO;
 import com.vetun.apirest.service.MascotaService;
 import com.vetun.apirest.service.UsuarioService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,14 +20,10 @@ import java.util.List;
 
 @RestController
 public class MascotaController {
-
+    @Autowired
     private MascotaService mascotaService;
+    @Autowired
     private UsuarioService usuarioService;
-
-    public MascotaController(MascotaService mascotaService, UsuarioService usuarioService) {
-        this.mascotaService = mascotaService;
-        this.usuarioService = usuarioService;
-    }
 
     @PostMapping( value = { "dueno/registro-mascota" } )
     public ResponseEntity<Void> registrarNuevaMascota(@RequestBody RegistrarMascotaPOJO mascotaPOJO){
@@ -40,7 +37,7 @@ public class MascotaController {
     }
 
     @GetMapping(value = {"dueno/mis-mascotas"})
-    public ResponseEntity<?> obtenerMascotas(){
+    public ResponseEntity<Object> obtenerMascotas(){
         String username = SecurityContextHolder.getContext( ).getAuthentication( ).getName();
         Usuario user = usuarioService.findByUsername(username);
         Dueno dueno = user.getDueno();
@@ -56,7 +53,7 @@ public class MascotaController {
     }
 
     @GetMapping(value = {"pruebas/mascotas"})
-    public ResponseEntity<?> obtenerMascotasAll(){
+    public ResponseEntity<Object> obtenerMascotasAll(){
 
         List<Mascota> mascotas = mascotaService.findAll();
 

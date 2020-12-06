@@ -18,43 +18,35 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.sql.Time;
 import java.util.*;
 
 @RestController
 public class UsuarioController {
+    @Autowired
     private UsuarioService usuarioService;
+    @Autowired
     private DuenoService duenoService;
+    @Autowired
     private MedicoService medicoService;
+    @Autowired
     private HoraAtencionService horaAtencionService;
+    @Autowired
     private CitaService citaService;
+    @Autowired
     private CostoService costoService;
+    @Autowired
     private PasswordResetService passwordResetService;
+    @Autowired
     private MascotaService mascotaService;
-
     @Autowired
     private EmailPort emailPort;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UsuarioController(UsuarioService usuarioService, DuenoService duenoService, MedicoService medicoService, HoraAtencionService horaAtencionService, CitaService citaService, CostoService costoService, PasswordResetService passwordResetService, MascotaService mascotaService, EmailPort emailPort, PasswordEncoder passwordEncoder) {
-        this.usuarioService = usuarioService;
-        this.duenoService = duenoService;
-        this.medicoService = medicoService;
-        this.horaAtencionService = horaAtencionService;
-        this.citaService = citaService;
-        this.costoService = costoService;
-        this.passwordResetService = passwordResetService;
-        this.mascotaService = mascotaService;
-        this.emailPort = emailPort;
-        this.passwordEncoder = passwordEncoder;
-    }
-
     @GetMapping(value = {"/usuario"})
-    public ResponseEntity<?> getUserAuthenticated() {
+    public ResponseEntity<Object> getUserAuthenticated() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Usuario userAuth = usuarioService.findByUsername(username);
         String rol = userAuth.getRol().getNombreRol();
@@ -75,9 +67,7 @@ public class UsuarioController {
     }
 
     @PostMapping(value = {"/usuario/horasDisponibles"})
-    public ResponseEntity<?> obtenerHorasDisponibles(@RequestBody FechaCitaPOJO fechaCita) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
+    public ResponseEntity<Object> obtenerHorasDisponibles(@RequestBody FechaCitaPOJO fechaCita) {
         Medico medico = medicoService.findById(fechaCita.getIdMedico());
         List<HoraAtencion> horarios = horaAtencionService.findByMedico(medico);
         List<Cita> citas = citaService.findCitas(fechaCita.getFechaCita(), fechaCita.getIdMedico());
@@ -98,7 +88,7 @@ public class UsuarioController {
     }
 
     @GetMapping(value = {"usuario/costos/{medicoId}"})
-    public ResponseEntity<?> obtenerCostos(@PathVariable int medicoId) {
+    public ResponseEntity<Object> obtenerCostos(@PathVariable int medicoId) {
 
         Medico medico = medicoService.findById(medicoId);
 
@@ -113,7 +103,7 @@ public class UsuarioController {
     }
 
     @PostMapping(value = {"/usuario/agendarCita"})
-    public ResponseEntity<?> agendarCita(@RequestBody Cita agendarCita) {
+    public ResponseEntity<Object> agendarCita(@RequestBody Cita agendarCita) {
         Cita cita = agendarCita;
         citaService.save(cita);
 
@@ -181,7 +171,7 @@ public class UsuarioController {
     }
 
     @PostMapping(value = {"/recuperarContrasena"})
-    public ResponseEntity<?> enviarCorreoRecuperacion(@RequestBody RecuperarContrasenaPOJO correoElectronico) {
+    public ResponseEntity<Object> enviarCorreoRecuperacion(@RequestBody RecuperarContrasenaPOJO correoElectronico) {
         Usuario user = usuarioService.findByCorreoElectronico(correoElectronico.getCorreoRecuperacion());
 
         if (user == null) {
@@ -258,7 +248,7 @@ public class UsuarioController {
     }
 
     @PostMapping(value = {"/nuevaContrasena"})
-    public ResponseEntity<?> nuevaContrasena(@RequestBody CambioContrasenaPOJO cambioContrasenaPOJO) {
+    public ResponseEntity<Object> nuevaContrasena(@RequestBody CambioContrasenaPOJO cambioContrasenaPOJO) {
         PasswordReset passwordReset = passwordResetService.findByToken(cambioContrasenaPOJO.getToken());
         Usuario user = passwordReset.getUsuario();
         user.setPassword(passwordEncoder.encode(cambioContrasenaPOJO.getNuevaContrasena()));

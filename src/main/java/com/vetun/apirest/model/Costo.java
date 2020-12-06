@@ -26,9 +26,10 @@ public class Costo {
     private Medico idMedico;
 
     @Column(name = "costo")
-    private int costo;
+    private int costoA;
 
     public Costo() {
+        //Necesary method
     }
 
     public int getIdCosto() {
@@ -56,18 +57,18 @@ public class Costo {
     }
 
     public int getCosto() {
-        return costo;
+        return costoA;
     }
 
     public void setCosto(int costo) {
-        this.costo = costo;
+        this.costoA = costo;
     }
 
     @Override
     public String toString() {
         return "Costo{" +
                 "idCosto=" + idCosto +
-                ", costo=" + costo +
+                ", costo=" + costoA +
                 '}';
     }
 }

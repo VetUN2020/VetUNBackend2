@@ -8,7 +8,7 @@ import java.util.List;
 
 @Service
 public class TipoAtencionService {
-    public TipoAtencionRepository tipoAtencionRepository;
+    private TipoAtencionRepository tipoAtencionRepository;
 
     public TipoAtencionService( TipoAtencionRepository tipoAtencionRepository ){this.tipoAtencionRepository = tipoAtencionRepository;}
 

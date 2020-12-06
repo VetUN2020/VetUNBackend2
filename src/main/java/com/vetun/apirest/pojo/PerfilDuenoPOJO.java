@@ -12,6 +12,7 @@ public class PerfilDuenoPOJO {
     private String usuarioDueno;
 
     public PerfilDuenoPOJO() {
+        //Necesary code
     }
 
     public int getIdDueno(){return idDueno;}

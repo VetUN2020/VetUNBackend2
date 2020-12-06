@@ -1,8 +1,6 @@
 package com.vetun.apirest.service;
 
-import com.vetun.apirest.model.Usuario;
 import com.vetun.apirest.model.Veterinaria;
-import com.vetun.apirest.pojo.RegistrarDuenoPOJO;
 import com.vetun.apirest.pojo.RegistrarVeterinariaPOJO;
 import com.vetun.apirest.repository.VeterinariaRepository;
 import org.springframework.stereotype.Service;

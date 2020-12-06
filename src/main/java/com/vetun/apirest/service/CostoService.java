@@ -2,7 +2,6 @@ package com.vetun.apirest.service;
 
 import com.vetun.apirest.model.Costo;
 import com.vetun.apirest.model.Medico;
-import com.vetun.apirest.model.TipoAtencion;
 import com.vetun.apirest.repository.CostoRepository;
 import org.springframework.stereotype.Service;
 

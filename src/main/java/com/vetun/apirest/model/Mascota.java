@@ -35,7 +35,9 @@ public class Mascota {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "idMascota")
     private List<Cita> citas;
 
-    public Mascota(){}
+    public Mascota(){
+        //Necesary method
+    }
 
     public Mascota(int idMascota, Dueno idDueno, String nombreMascota, String especie, String raza, List<Vacunacion> vacunas, List<Cita> citas) {
         this.idMascota = idMascota;

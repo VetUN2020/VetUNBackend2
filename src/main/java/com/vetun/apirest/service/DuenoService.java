@@ -36,13 +36,13 @@ public class DuenoService {
         return correctness;
     }
 
-    public Dueno mapperDuenoEntity( RegistrarDuenoPOJO DuenoPOJO ){
+    public Dueno mapperDuenoEntity( RegistrarDuenoPOJO duenoPOJO ){
         Dueno newDueno = new Dueno( );
-        newDueno.setNombreDueno( DuenoPOJO.getNombreDueno() );
-        newDueno.setApellidoDueno( DuenoPOJO.getApellidoDueno() );
-        newDueno.setCedulaDueno( DuenoPOJO.getCedulaDueno() );
-        newDueno.setDireccionDueno( DuenoPOJO.getDireccionDueno() );
-        newDueno.setTelefonoDueno( DuenoPOJO.getTelefonoDueno() );
+        newDueno.setNombreDueno( duenoPOJO.getNombreDueno() );
+        newDueno.setApellidoDueno( duenoPOJO.getApellidoDueno() );
+        newDueno.setCedulaDueno( duenoPOJO.getCedulaDueno() );
+        newDueno.setDireccionDueno( duenoPOJO.getDireccionDueno() );
+        newDueno.setTelefonoDueno( duenoPOJO.getTelefonoDueno() );
         return newDueno;
     }
 

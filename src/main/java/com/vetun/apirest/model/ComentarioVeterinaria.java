@@ -1,6 +1,5 @@
 package com.vetun.apirest.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
@@ -29,6 +28,7 @@ public class ComentarioVeterinaria {
 
 
     public ComentarioVeterinaria() {
+        //Necesary method
     }
 
     public int getIdComentarioVeterinaria() {

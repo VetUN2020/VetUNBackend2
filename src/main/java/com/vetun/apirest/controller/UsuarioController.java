@@ -32,6 +32,7 @@ public class UsuarioController {
     private CitaService citaService;
     private CostoService costoService;
     private PasswordResetService passwordResetService;
+    private MascotaService mascotaService;
 
     @Autowired
     private EmailPort emailPort;
@@ -39,7 +40,7 @@ public class UsuarioController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UsuarioController(UsuarioService usuarioService, DuenoService duenoService, MedicoService medicoService, HoraAtencionService horaAtencionService, CitaService citaService, CostoService costoService, PasswordResetService passwordResetService) {
+    public UsuarioController(UsuarioService usuarioService, DuenoService duenoService, MedicoService medicoService, HoraAtencionService horaAtencionService, CitaService citaService, CostoService costoService, PasswordResetService passwordResetService, MascotaService mascotaService, EmailPort emailPort, PasswordEncoder passwordEncoder) {
         this.usuarioService = usuarioService;
         this.duenoService = duenoService;
         this.medicoService = medicoService;
@@ -47,6 +48,9 @@ public class UsuarioController {
         this.citaService = citaService;
         this.costoService = costoService;
         this.passwordResetService = passwordResetService;
+        this.mascotaService = mascotaService;
+        this.emailPort = emailPort;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping(value = {"/usuario"})
@@ -112,6 +116,67 @@ public class UsuarioController {
     public ResponseEntity<?> agendarCita(@RequestBody Cita agendarCita) {
         Cita cita = agendarCita;
         citaService.save(cita);
+
+        Medico medico = medicoService.findById(agendarCita.getIdMedico().getIdMedico());
+        Mascota mascota = mascotaService.findById(agendarCita.getIdMascota().getIdMascota());
+        Dueno dueno = duenoService.findById(mascota.getIdDueno().getIdDueno());
+        Usuario usuarioM = usuarioService.findByUsername(medico.getUsuario().getUsername());
+        Usuario usuarioD = usuarioService.findByUsername(dueno.getUsuario().getUsername());
+
+        EmailBody emailBody = new EmailBody();
+
+        emailBody.setEmail(usuarioM.getCorreoElectronico());
+        emailBody.setSubject("Nueva cita agendada");
+        emailBody.setContent("<center>" +
+                "      <h2 style=\"font-family: Arial\"><b>Nueva cita agendada</b></h2>" +
+                "      <p style=\"font-family: Arial\">Hola, " + usuarioM.getUsername() + "</p>" +
+                "      <p style=\"font-family: Arial\">" +
+                "        Se te ha asignado una nueva cita con los siguientes datos:" +
+                "      </p>" +
+                "      <p style=\"font-family: Arial\">" +
+                "        Dueño: " + dueno.getNombreDueno() + " " + dueno.getApellidoDueno() +
+                "      </p>" +
+                "      <p style=\"font-family: Arial\">" +
+                "        Mascota: " + mascota.getNombreMascota() +
+                "      </p>" +
+                "      <p style=\"font-family: Arial\">" +
+                "        Fecha: " + agendarCita.getFechaCita() +
+                "      </p>" +
+                "      <p style=\"font-family: Arial\">" +
+                "        Hora: " + agendarCita.getHoraCita() +
+                "      </p>" +
+                "      <p style=\"font-family: Arial\">" +
+                "        Motivo: " + agendarCita.getIdAtencion().getDescripcionAtencion() +
+                "      </p>" +
+                "    </center>");
+        emailPort.sendEmail(emailBody);
+
+        emailBody.setEmail(usuarioD.getCorreoElectronico());
+        emailBody.setSubject("Nueva cita agendada");
+        emailBody.setContent("<center>" +
+                "      <h2 style=\"font-family: Arial\"><b>Nueva cita agendada</b></h2>" +
+                "      <p style=\"font-family: Arial\">Hola, " + usuarioD.getUsername() + "</p>" +
+                "      <p style=\"font-family: Arial\">" +
+                "        Se ha agendado correctamente tu cita con los siguientes datos:" +
+                "      </p>" +
+                "      <p style=\"font-family: Arial\">" +
+                "        Medico: " + medico.getNombreMedico() + " " + medico.getApellidoMedico() +
+                "      </p>" +
+                "      <p style=\"font-family: Arial\">" +
+                "        Mascota: " + mascota.getNombreMascota() +
+                "      </p>" +
+                "      <p style=\"font-family: Arial\">" +
+                "        Fecha: " + agendarCita.getFechaCita() +
+                "      </p>" +
+                "      <p style=\"font-family: Arial\">" +
+                "        Hora: " + agendarCita.getHoraCita() +
+                "      </p>" +
+                "      <p style=\"font-family: Arial\">" +
+                "        Motivo: " + agendarCita.getIdAtencion().getDescripcionAtencion() +
+                "      </p>" +
+                "    </center>");
+        emailPort.sendEmail(emailBody);
+
         return ResponseEntity.ok(cita);
     }
 

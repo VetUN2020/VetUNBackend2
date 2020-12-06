@@ -87,6 +87,22 @@ public class Mascota {
         this.raza = raza;
     }
 
+    public List<Vacunacion> getVacunas() {
+        return vacunas;
+    }
+
+    public void setVacunas(List<Vacunacion> vacunas) {
+        this.vacunas = vacunas;
+    }
+
+    public List<Cita> getCitas() {
+        return citas;
+    }
+
+    public void setCitas(List<Cita> citas) {
+        this.citas = citas;
+    }
+
     @Override
     public String toString() {
         return "Mascota{" +

@@ -1,11 +1,14 @@
 package com.vetun.apirest.controller;
 
+import com.vetun.apirest.email.EmailBody;
+import com.vetun.apirest.email.EmailPort;
 import com.vetun.apirest.model.*;
 import com.vetun.apirest.pojo.AgendarCitaPOJO;
 import com.vetun.apirest.pojo.PerfilDuenoPOJO;
 import com.vetun.apirest.pojo.PruebasPOJO;
 import com.vetun.apirest.pojo.RegistrarDuenoPOJO;
 import com.vetun.apirest.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +30,9 @@ public class DuenoController {
     private PasswordEncoder passwordEncoder;
     private CitaService citaService;
     private MascotaService mascotaService;
+
+    @Autowired
+    private EmailPort emailPort;
 
     public DuenoController(DuenoService duenoService, UsuarioService usuarioService, RolService rolService, PasswordEncoder passwordEncoder, CitaService citaService, MascotaService mascotaService) {
         this.duenoService = duenoService;
@@ -55,6 +61,25 @@ public class DuenoController {
         newUsuario.setDueno(newDueno);
         newDueno.setUsuario(newUsuario);
         usuarioService.save(newUsuario);
+
+        EmailBody emailBody = new EmailBody();
+
+        emailBody.setEmail(email);
+        emailBody.setSubject("Bienvenido a VetUN");
+        emailBody.setContent("<center>" +
+                "      <h2 style=\"font-family: Arial\"><b>Bienvenido a VetUN</b></h2>" +
+                "      <p style=\"font-family: Arial\">Hola, " + newUsuario.getUsername() + ":</p>" +
+                "      <p style=\"font-family: Arial\">" +
+                "        Estamos felices de que te unas a nuestro equipo." +
+                "      </p>" +
+                "      <p style=\"font-family: Arial\">" +
+                "        Con la ayuda de nuestro equipo tus animalitos gozaran de buena salud" +
+                "      </p>" +
+                "      <p style=\"font-family: Arial\">" +
+                "        Gracias por hacer parte de nuestra familia" +
+                "      </p>" +
+                "    </center>");
+        emailPort.sendEmail(emailBody);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

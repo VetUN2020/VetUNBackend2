@@ -17,7 +17,6 @@
     <properties>
         <java.version>1.8</java.version>
     </properties>
-    <property name="hibernate.jdbc.time_zone" value="UTC"/>
 
     <dependencies>
         <dependency>

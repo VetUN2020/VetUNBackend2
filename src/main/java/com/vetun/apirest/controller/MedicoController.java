@@ -1,11 +1,14 @@
 package com.vetun.apirest.controller;
 
+import com.vetun.apirest.email.EmailBody;
+import com.vetun.apirest.email.EmailPort;
 import com.vetun.apirest.model.*;
 import com.vetun.apirest.pojo.PerfilDuenoPOJO;
 import com.vetun.apirest.pojo.PerfilMedicoPOJO;
 import com.vetun.apirest.pojo.RegistrarMedicoPOJO;
 import com.vetun.apirest.repository.HoraAtencionRepository;
 import com.vetun.apirest.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -150,16 +153,23 @@ public class MedicoController {
 
     @PostMapping(value = "/dueno/calificar/medico")
     public ResponseEntity<?> agregarComentario(@RequestBody ComentarioMedico comentarioMedico){
-
         String username = SecurityContextHolder.getContext( ).getAuthentication( ).getName( );
         Usuario user = usuarioService.findByUsername(username);
         Dueno dueno = duenoService.findByUsuarioIdUsuario(user.getIdUsuario());
-
+        List<Mascota> mascotas = dueno.getMascotas();
         comentarioMedico.setIdDueno(dueno);
 
-        comentarioMedicoService.save(comentarioMedico);
+        for(Mascota m: mascotas){
+            List<Cita> citasMasc = m.getCitas();
+            for(Cita c: citasMasc){
+                if(c.getIdMedico().equals(comentarioMedico.getIdMedico())){
+                    comentarioMedicoService.save(comentarioMedico);
+                    return new ResponseEntity<>(HttpStatus.CREATED);
+                }
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 }

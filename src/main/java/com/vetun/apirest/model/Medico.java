@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name="medico")
@@ -202,5 +203,18 @@ public class Medico {
                 ", matriculaProfesional='" + matriculaProfesional + '\'' +
                 ", linkMedico='" + linkMedico + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Medico medico = (Medico) o;
+        return idMedico == medico.idMedico;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idMedico);
     }
 }

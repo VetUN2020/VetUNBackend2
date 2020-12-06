@@ -106,11 +106,19 @@ public class VeterinariaController {
         String username = SecurityContextHolder.getContext( ).getAuthentication( ).getName( );
         Usuario user = usuarioService.findByUsername(username);
         Dueno dueno = duenoService.findByUsuarioIdUsuario(user.getIdUsuario());
-
+        List<Mascota> mascotas = dueno.getMascotas();
         comentarioVeterinaria.setIdDueno(dueno);
-        comentarioVeterinariaService.save(comentarioVeterinaria);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        for(Mascota m: mascotas){
+            List<Cita> citasMasc = m.getCitas();
+            for(Cita c: citasMasc){
+                if(c.getIdMedico().getIdVeterinaria().equals(comentarioVeterinaria.getIdVeterinaria())){
+                    comentarioVeterinariaService.save(comentarioVeterinaria);
+                    return new ResponseEntity<>(HttpStatus.CREATED);
+                }
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 

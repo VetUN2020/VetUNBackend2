@@ -3,10 +3,7 @@ package com.vetun.apirest.controller;
 import com.vetun.apirest.email.EmailBody;
 import com.vetun.apirest.email.EmailPort;
 import com.vetun.apirest.model.*;
-import com.vetun.apirest.pojo.CambioContrasenaPOJO;
-import com.vetun.apirest.pojo.FechaCitaPOJO;
-import com.vetun.apirest.pojo.MenuBarUserPOJO;
-import com.vetun.apirest.pojo.RecuperarContrasenaPOJO;
+import com.vetun.apirest.pojo.*;
 import com.vetun.apirest.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -252,11 +249,49 @@ public class UsuarioController {
         PasswordReset passwordReset = passwordResetService.findByToken(cambioContrasenaPOJO.getToken());
         Usuario user = passwordReset.getUsuario();
         user.setPassword(passwordEncoder.encode(cambioContrasenaPOJO.getNuevaContrasena()));
-
         passwordResetService.delete(passwordReset.getIdToken());
         usuarioService.save(user);
-
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
+    @PostMapping(value = {"/sendtwofactor"})
+    public ResponseEntity<Object> sendtwoFactor(@RequestBody UserTwoFactorPOJO twoFactor){
+        Usuario user = usuarioService.findByUsername(twoFactor.getUsername());
+        if(user == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        Random r = new Random();
+        String randomNumber = String.format("%04d", r.nextInt(10000));
+        user.setToken2FA(passwordEncoder.encode(randomNumber));
+        user.setActive2FA(true);
+        usuarioService.save(user);
+
+        EmailBody emailBody = new EmailBody();
+
+        emailBody.setEmail(user.getCorreoElectronico());
+        emailBody.setSubject("Token autenticación");
+        emailBody.setContent("<center>" +
+                "      <h2 style=\"font-family: Arial\"><b>Token autenticación</b></h2>" +
+                "      <p style=\"font-family: Arial\">Hola, " + user.getUsername() + ":</p>" +
+                "      <p style=\"font-family: Arial\">" +
+                "        El token para ingresar a tu cuenta es :" +
+                "      </p>" +
+                "      <p>" + randomNumber +
+                "      </p>" +
+                "    </center>");
+        emailPort.sendEmail(emailBody);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping(value = {"/verifytwofactor"})
+    public ResponseEntity<Object> verifyTwoFactor(@RequestBody TwoFactorAuthenticationPOJO twoFactor){
+        Usuario user = usuarioService.findByUsername(twoFactor.getUsername());
+        if(passwordEncoder.matches(twoFactor.getSecret(), user.getToken2FA()) && user.getActive2FA()){
+            user.setActive2FA(false);
+            usuarioService.save(user);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        }else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

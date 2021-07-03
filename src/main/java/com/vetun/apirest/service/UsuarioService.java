@@ -26,10 +26,11 @@ public class UsuarioService {
     }
 
     public Usuario mapperUsuarioEntityDueno(RegistrarDuenoPOJO duenoPOJO ){
-        Usuario newUser = new Usuario( );
+        Usuario newUser = new Usuario();
         newUser.setUsername( duenoPOJO.getUsername() );
         newUser.setCorreoElectronico( duenoPOJO.getCorreoElectronico() );
         newUser.setPassword(duenoPOJO.getPassword());
+        newUser.setActive2FA(false);
         return newUser;
     }
 
@@ -38,6 +39,7 @@ public class UsuarioService {
         newUser.setUsername( medicoPOJO.getUsername() );
         newUser.setCorreoElectronico( medicoPOJO.getCorreoElectronico() );
         newUser.setPassword(medicoPOJO.getPassword());
+        newUser.setActive2FA(false);
         return newUser;
     }
 }

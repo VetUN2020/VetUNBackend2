@@ -213,8 +213,8 @@ create table USUARIO
     USERNAME             varchar(50) not null,
     PASSWORD             varchar(50) not null,
     CORREO_ELECTRONICO   varchar(150) not null,
-    TOKEN_2FA            varchar(50),
-    ACTIVE_2FA           boolean,
+    TOKEN2FA            varchar(50),
+    ACTIVE2FA           boolean,
     primary key (ID_USUARIO)
 );
 

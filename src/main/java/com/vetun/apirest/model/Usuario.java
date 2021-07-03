@@ -36,19 +36,17 @@ public class Usuario {
     @JoinColumn(name = "correo_electronico")
     private String correoElectronico;
 
+    @JoinColumn(name = "TOKEN2FA")
+    private String token2fa;
+
+    @JoinColumn(name = "ACTIVE2FA")
+    private Boolean active2fa;
+
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "usuario")
     private PasswordReset reset;
 
-    @JoinColumn(name = "token_2fa")
-    private String token2FA;
-
-    @JoinColumn(name = "active_2fa")
-    private Boolean active2FA;
-
     public Usuario() {
-        this.token2FA = null;
-        this.active2FA = false;
     }
 
     public Usuario(int idUsuario, Dueno dueno, Medico medico, Rol rol, String username, String password, String correoElectronico) {
@@ -59,8 +57,6 @@ public class Usuario {
         this.username = username;
         this.password = password;
         this.correoElectronico = correoElectronico;
-        this.token2FA = null;
-        this.active2FA = false;
     }
 
     public int getIdUsuario() {
@@ -120,19 +116,19 @@ public class Usuario {
     }
 
     public String getToken2FA() {
-        return token2FA;
+        return token2fa;
     }
 
-    public void setToken2FA(String token2FA) {
-        this.token2FA = token2FA;
+    public void setToken2FA(String token2fa) {
+        this.token2fa = token2fa;
     }
 
     public Boolean getActive2FA() {
-        return active2FA;
+        return active2fa;
     }
 
-    public void setActive2FA(Boolean active2FA) {
-        this.active2FA = active2FA;
+    public void setActive2FA(Boolean active2fa) {
+        this.active2fa = active2fa;
     }
 
     @Override

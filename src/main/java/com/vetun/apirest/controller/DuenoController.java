@@ -6,6 +6,7 @@ import com.vetun.apirest.model.*;
 import com.vetun.apirest.pojo.PerfilDuenoPOJO;
 import com.vetun.apirest.pojo.RegistrarDuenoPOJO;
 import com.vetun.apirest.service.*;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -17,9 +18,17 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 public class DuenoController {
+
+    private static final org.slf4j.Logger LOGGER =  LoggerFactory.getLogger(DuenoController.class);
+
+    private static final String US_NO_REGISTRADO = "Usuario no registrado";
+    private static final String US_NO_ENCONTRADO = "Usuario no encontrado";
+    private static final String FALLO_CAPTCHA = "Captcha fallido";
+
     @Autowired
     private DuenoService duenoService;
     @Autowired
@@ -45,6 +54,7 @@ public class DuenoController {
         String email = duenoPOJO.getCorreoElectronico();
         Usuario usuarioExistente = usuarioService.findByCorreoElectronico(email);
         if (rol == null || existingDueno != null || !duenoService.isRightDueno(duenoPOJO) || usuarioExistente != null) {
+            LOGGER.info(US_NO_REGISTRADO);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -55,6 +65,7 @@ public class DuenoController {
 
         assert reCaptchaResponse != null;
         if(!reCaptchaResponse.isSuccess()){
+            LOGGER.info(FALLO_CAPTCHA);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -95,6 +106,7 @@ public class DuenoController {
         Dueno dueno = duenoService.findByUsuarioIdUsuario(user.getIdUsuario());
 
         if (dueno == null) {
+            LOGGER.info(US_NO_ENCONTRADO);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 

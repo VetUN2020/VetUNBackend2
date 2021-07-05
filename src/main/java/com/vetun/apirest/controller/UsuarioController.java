@@ -5,6 +5,7 @@ import com.vetun.apirest.email.EmailPort;
 import com.vetun.apirest.model.*;
 import com.vetun.apirest.pojo.*;
 import com.vetun.apirest.service.*;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +19,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Time;
 import java.util.*;
+import java.util.logging.Logger;
 
 @RestController
 public class UsuarioController {
+
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(UsuarioController.class);
+    private static  final String CO_NO_CALCULADOS = "Costos no calculados";
+    private static  final  String US_NO_ENCONTRADO = "Usuario no encontrado";
+    private static  final  String CON_REPETIDA = "Contraseña repetida";
+    private static  final  String AUT_FALLIDA = "Autenticación fallida";
+
     @Autowired
     private UsuarioService usuarioService;
     @Autowired
@@ -92,6 +101,7 @@ public class UsuarioController {
         List<Costo> costos = costoService.findByIdMedico(medico);
 
         if (costos == null) {
+            LOGGER.info(CO_NO_CALCULADOS);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -172,11 +182,13 @@ public class UsuarioController {
         Usuario user = usuarioService.findByCorreoElectronico(correoElectronico.getCorreoRecuperacion());
 
         if (user == null) {
+            LOGGER.info(US_NO_ENCONTRADO);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         PasswordReset passwordExistente = passwordResetService.findByUsuario(user);
 
         if (passwordExistente != null) {
+            LOGGER.info(CON_REPETIDA);
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
@@ -258,6 +270,7 @@ public class UsuarioController {
     public ResponseEntity<Object> sendtwoFactor(@RequestBody UserTwoFactorPOJO twoFactor){
         Usuario user = usuarioService.findByUsername(twoFactor.getUsername());
         if(user == null){
+            LOGGER.info(US_NO_ENCONTRADO);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Random r = new Random();
@@ -291,6 +304,7 @@ public class UsuarioController {
             usuarioService.save(user);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         }else{
+            LOGGER.info(AUT_FALLIDA);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

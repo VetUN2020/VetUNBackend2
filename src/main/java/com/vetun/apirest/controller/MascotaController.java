@@ -6,6 +6,7 @@ import com.vetun.apirest.model.Usuario;
 import com.vetun.apirest.pojo.RegistrarMascotaPOJO;
 import com.vetun.apirest.service.MascotaService;
 import com.vetun.apirest.service.UsuarioService;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +17,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 
 @RestController
 public class MascotaController {
+
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MascotaController.class);
+    private static final String MS_NO_ENCONTRADAS = "Mascotas no encontradas";
+
     @Autowired
     private MascotaService mascotaService;
     @Autowired
@@ -45,6 +51,7 @@ public class MascotaController {
         List<Mascota> mascotas = mascotaService.findByDueno(dueno.getIdDueno());
 
         if(mascotas == null){
+            LOGGER.info(MS_NO_ENCONTRADAS);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 

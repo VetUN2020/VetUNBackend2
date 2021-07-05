@@ -208,12 +208,14 @@ create table TIPO_ATENCION
 /*==============================================================*/
 create table USUARIO
 (
-   ID_USUARIO           int not null auto_increment,
-   ID_ROL               int not null,
-   USERNAME             varchar(50) not null,
-   PASSWORD             varchar(50) not null,
-   CORREO_ELECTRONICO   varchar(150) not null,
-   primary key (ID_USUARIO)
+    ID_USUARIO           int not null auto_increment,
+    ID_ROL               int not null,
+    USERNAME             varchar(50) not null,
+    PASSWORD             varchar(50) not null,
+    CORREO_ELECTRONICO   varchar(150) not null,
+    TOKEN2FA            varchar(50),
+    ACTIVE2FA           boolean,
+    primary key (ID_USUARIO)
 );
 
 /*==============================================================*/

@@ -6,43 +6,47 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(name="usuario")
+@Table(name = "usuario")
 public class Usuario {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name="id_usuario")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_usuario")
     private int idUsuario;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY, cascade =  CascadeType.ALL, mappedBy = "usuario")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "usuario")
     private Dueno dueno;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY, cascade =  CascadeType.ALL, mappedBy = "usuario")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "usuario")
     private Medico medico;
 
     @ManyToOne
-    @JoinColumn(name = "id_rol" )
+    @JoinColumn(name = "id_rol")
     private Rol rol;
 
-    @JoinColumn(name = "username" )
+    @JoinColumn(name = "username")
     private String username;
 
     @JsonIgnore
-    @JoinColumn(name = "password" )
+    @JoinColumn(name = "password")
     private String password;
 
-    @JoinColumn(name = "correo_electronico" )
+    @JoinColumn(name = "correo_electronico")
     private String correoElectronico;
 
+    @JoinColumn(name = "TOKEN2FA")
+    private String token2fa;
+
+    @JoinColumn(name = "ACTIVE2FA")
+    private Boolean active2fa;
+
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY, cascade =  CascadeType.ALL, mappedBy = "usuario")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "usuario")
     private PasswordReset reset;
 
-
     public Usuario() {
-        //Necesary method
     }
 
     public Usuario(int idUsuario, Dueno dueno, Medico medico, Rol rol, String username, String password, String correoElectronico) {
@@ -109,6 +113,22 @@ public class Usuario {
 
     public void setCorreoElectronico(String correoElectronico) {
         this.correoElectronico = correoElectronico;
+    }
+
+    public String getToken2FA() {
+        return token2fa;
+    }
+
+    public void setToken2FA(String token2fa) {
+        this.token2fa = token2fa;
+    }
+
+    public Boolean getActive2FA() {
+        return active2fa;
+    }
+
+    public void setActive2FA(Boolean active2fa) {
+        this.active2fa = active2fa;
     }
 
     @Override

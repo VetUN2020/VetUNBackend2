@@ -7,11 +7,13 @@ import com.vetun.apirest.pojo.PerfilDuenoPOJO;
 import com.vetun.apirest.pojo.RegistrarDuenoPOJO;
 import com.vetun.apirest.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,15 +34,27 @@ public class DuenoController {
     private MascotaService mascotaService;
     @Autowired
     private EmailPort emailPort;
+    @Autowired
+    private RestTemplate restTemplate;
 
     @PostMapping(value = {"/registro/nuevo-dueno/"})
-    public ResponseEntity<Object> registerNewUser(@RequestBody RegistrarDuenoPOJO duenoPOJO) {
+    public ResponseEntity<Object> registerNewUser(@RequestBody RegistrarDuenoPOJO duenoPOJO, @RequestParam(name="response") String captchaResponse) {
         Rol rol = rolService.findById(1);
         duenoPOJO.setPassword(passwordEncoder.encode(duenoPOJO.getPassword()));
         Dueno existingDueno = duenoService.findByCedulaDueno(duenoPOJO.getCedulaDueno());
         String email = duenoPOJO.getCorreoElectronico();
         Usuario usuarioExistente = usuarioService.findByCorreoElectronico(email);
         if (rol == null || existingDueno != null || !duenoService.isRightDueno(duenoPOJO) || usuarioExistente != null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        String url = "https://www.google.com/recaptcha/api/siteverify";
+        String params = "?secret=6LfutXIbAAAAAL72Z_qi4KHNhNhjAogy3P-Fgos-&response="+captchaResponse;
+
+        ReCaptchaResponse reCaptchaResponse = restTemplate.exchange(url+params, HttpMethod.POST, null, ReCaptchaResponse.class).getBody();
+
+        assert reCaptchaResponse != null;
+        if(!reCaptchaResponse.isSuccess()){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 

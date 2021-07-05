@@ -7,11 +7,13 @@ import com.vetun.apirest.pojo.PerfilMedicoPOJO;
 import com.vetun.apirest.pojo.RegistrarMedicoPOJO;
 import com.vetun.apirest.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -38,6 +40,8 @@ public class MedicoController {
     private DuenoService duenoService;
     @Autowired
     private EmailPort emailPort;
+    @Autowired
+    private RestTemplate restTemplate;
 
     @GetMapping("/medicos/{medicoId}")
     public ResponseEntity<Object>getMedico(@PathVariable int medicoId){
@@ -49,7 +53,7 @@ public class MedicoController {
     }
 
     @PostMapping( value = { "/registro/nuevo-medico/" } )
-    public ResponseEntity<Void> registrarNuevoMedico(@RequestBody RegistrarMedicoPOJO medicoPOJO){
+    public ResponseEntity<Void> registrarNuevoMedico(@RequestBody RegistrarMedicoPOJO medicoPOJO, @RequestParam(name="response") String captchaResponse){
         Rol rol = rolService.findById( 2 );
         medicoPOJO.setPassword(passwordEncoder.encode(medicoPOJO.getPassword()));
         Medico medicoExistente = medicoService.findByCedulaMedico( medicoPOJO.getCedulaMedico() );
@@ -57,6 +61,16 @@ public class MedicoController {
         Usuario usuarioExistente = usuarioService.findByCorreoElectronico(email);
         if( rol == null || medicoExistente != null || !medicoService.isRightMedico( medicoPOJO ) || usuarioExistente != null ){
             return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
+        }
+
+        String url = "https://www.google.com/recaptcha/api/siteverify";
+        String params = "?secret=6LfutXIbAAAAAL72Z_qi4KHNhNhjAogy3P-Fgos-&response="+captchaResponse;
+
+        ReCaptchaResponse reCaptchaResponse = restTemplate.exchange(url+params, HttpMethod.POST, null, ReCaptchaResponse.class).getBody();
+
+        assert reCaptchaResponse != null;
+        if(!reCaptchaResponse.isSuccess()){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         Medico nuevoMedico = medicoService.mapperMedicoEntity(medicoPOJO);

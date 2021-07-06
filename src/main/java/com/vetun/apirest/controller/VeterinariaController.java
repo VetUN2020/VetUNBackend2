@@ -6,6 +6,7 @@ import com.vetun.apirest.pojo.RegistrarVeterinariaPOJO;
 import com.vetun.apirest.repository.MedicoRepository;
 import com.vetun.apirest.repository.UsuarioRepository;
 import com.vetun.apirest.service.*;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +14,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 public class VeterinariaController {
+
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(VeterinariaController.class);
+    private static final String VET_NO_ENCONTRADA = "Veterinaria no encontrada";
+    private static final String CAL_FALLIDA = "Calificación de veterinaria fallida";
 
     @Autowired
     private VeterinariaService veterinariaService;
@@ -66,6 +72,7 @@ public class VeterinariaController {
         Veterinaria veterinaria = veterinariaService.findById(veterinariaId);
 
         if(veterinaria == null) {
+            LOGGER.info(VET_NO_ENCONTRADA);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -114,6 +121,7 @@ public class VeterinariaController {
                 }
             }
         }
+        LOGGER.info(CAL_FALLIDA);
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 

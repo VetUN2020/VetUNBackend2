@@ -11,6 +11,7 @@ public class RegistrarDuenoPOJO {
     private String apellidoDueno;
     private Long telefonoDueno;
     private String direccionDueno;
+    private String token;
 
     public String getUsername() {
         return username;
@@ -74,6 +75,14 @@ public class RegistrarDuenoPOJO {
 
     public void setDireccionDueno(String direccionDueno) {
         this.direccionDueno = direccionDueno;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     @Override

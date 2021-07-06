@@ -170,12 +170,10 @@ public class UsuarioController {
     @PostMapping(value = {"/recuperarContrasena"})
     public ResponseEntity<Object> enviarCorreoRecuperacion(@RequestBody RecuperarContrasenaPOJO correoElectronico) {
         Usuario user = usuarioService.findByCorreoElectronico(correoElectronico.getCorreoRecuperacion());
-
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         PasswordReset passwordExistente = passwordResetService.findByUsuario(user);
-
         if (passwordExistente != null) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }

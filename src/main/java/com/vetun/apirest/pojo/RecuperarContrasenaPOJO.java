@@ -11,4 +11,11 @@ public class RecuperarContrasenaPOJO {
     public void setCorreoRecuperacion(String correoRecuperacion) {
         this.correoRecuperacion = correoRecuperacion;
     }
+
+    @Override
+    public String toString() {
+        return "RecuperarContrasenaPOJO{" +
+                "correoRecuperacion='" + correoRecuperacion + '\'' +
+                '}';
+    }
 }

@@ -69,4 +69,14 @@ public class PasswordReset {
     public void setHoraExpiracion(Time horaExpiracion) {
         this.horaExpiracion = horaExpiracion;
     }
+
+    @Override
+    public String toString() {
+        return "PasswordReset{" +
+                "idToken=" + idToken +
+                ", token='" + token + '\'' +
+                ", fechaExpiracion=" + fechaExpiracion +
+                ", horaExpiracion=" + horaExpiracion +
+                '}';
+    }
 }

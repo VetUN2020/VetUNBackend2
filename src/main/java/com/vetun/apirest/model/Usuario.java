@@ -135,9 +135,6 @@ public class Usuario {
     public String toString() {
         return "Usuario{" +
                 "idUsuario=" + idUsuario +
-                ", dueno=" + dueno +
-                ", medico=" + medico +
-                ", rol=" + rol +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", correoElectronico='" + correoElectronico + '\'' +
